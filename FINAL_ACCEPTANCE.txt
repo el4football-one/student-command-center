@@ -1,0 +1,23 @@
+STUDENT COMMAND CENTER v1.0 — FUNCTIONAL FREEZE
+
+Status: Final master candidate
+Freeze date: August 23, 2026
+
+This package is the frozen v1.0 candidate. Do not add features to this build.
+Release gate: one final real-device acceptance pass after deployment.
+
+Acceptance pass:
+1. App opens to Dashboard.
+2. Quick Add appears only on Dashboard.
+3. Help remains available across main pages.
+4. Quick Add routes directly to the selected action.
+5. Schedule form scrolls above the mobile keyboard; time picker works.
+6. Saving a Quick Add assignment/exam/activity returns to Dashboard.
+7. Study timer and XP behave correctly.
+8. Completed assignments move to Completed and use 7-day retention.
+9. Parent Updates routes/labels/help are correct.
+10. Reward animation plays and current trophy remains on Dashboard.
+11. Trophy Case appears in Progress.
+12. Existing data persists through normal close/reopen.
+
+If all 12 pass, this exact package is the v1.0 release master.

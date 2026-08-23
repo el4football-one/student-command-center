@@ -1,0 +1,10 @@
+{
+  "product": "Student Command Center",
+  "version": "1.0",
+  "status": "FUNCTIONAL FREEZE",
+  "freeze_date": "2026-08-23",
+  "index_sha256": "5cacb05e3c44b84a14b048d0b29a8295d17110f35967598c5626b43fd1453c58",
+  "qa_passed": 23,
+  "qa_total": 23,
+  "note": "Static regression QA passed. Final real-device acceptance remains the release gate."
+}

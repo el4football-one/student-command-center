@@ -1,0 +1,1788 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Student Command Center — ProgressMint Studios</title>
+<meta name="theme-color" content="#10232d">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self' mailto:;">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="Student Command Center by ProgressMint Studios — schoolwork, schedules, activities and progress in one place.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<style>
+:root{--bg:#0e1720;--panel:#172531;--panel2:#1d303e;--text:#f5f8f8;--muted:#a8bbc4;--mint:#57d6a6;--blue:#78a9ff;--line:#ffffff14}
+[data-theme=light]{--bg:#eef4f1;--panel:#fff;--panel2:#f5f8f7;--text:#173243;--muted:#647985;--line:#17324318}
+*{box-sizing:border-box}
+button,input,select,textarea{min-height:44px}
+button{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+input,select,textarea{font-size:16px}
+body{-webkit-text-size-adjust:100%}
+.mobilebar{display:none}
+.safe-bottom{padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--text)}
+.app{display:grid;grid-template-columns:230px 1fr;min-height:100vh}.side{background:#10232d;padding:20px 14px;position:sticky;top:0;height:100vh}
+.brand{display:flex;gap:10px;align-items:center;margin-bottom:18px}.logo{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:var(--mint);color:#10232d;font-weight:900}
+.brand small{display:block;color:#9cb7bf}.nav button{width:100%;text-align:left;border:0;background:transparent;color:#dce9eb;padding:11px;border-radius:11px;margin:2px 0;cursor:pointer}
+.nav button:hover,.nav button.on{background:#57d6a61c}.foot{position:absolute;bottom:16px;color:#8da5ad;font-size:12px}
+main{padding:22px}.top{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:18px}.top h1{margin:0}.muted{color:var(--muted)}
+.btn{background:var(--panel);color:var(--text);border:1px solid var(--line);padding:9px 12px;border-radius:10px;cursor:pointer}.btn.primary{background:var(--mint);color:#10232d;border:0;font-weight:800}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:13px}.card{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:15px;box-shadow:0 12px 30px #0002}
+.s3{grid-column:span 3}.s4{grid-column:span 4}.s5{grid-column:span 5}.s6{grid-column:span 6}.s7{grid-column:span 7}.s8{grid-column:span 8}.s12{grid-column:span 12}
+.pill{display:inline-block;padding:5px 8px;border-radius:999px;background:#57d6a61c;color:var(--mint);font-size:12px;font-weight:800}.metric{font-size:30px;font-weight:900}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px}.list{display:grid;gap:8px}.item{background:var(--panel2);border:1px solid var(--line);padding:11px;border-radius:12px}.item strong{display:block}.due{font-size:12px;color:#ffd477}
+.progress{height:9px;background:var(--panel2);border-radius:99px;overflow:hidden}.progress span{display:block;height:100%;background:linear-gradient(90deg,var(--mint),var(--blue))}
+.quick{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.quick button{padding:14px 8px;border-radius:12px;background:var(--panel2);color:var(--text);border:1px solid var(--line)}
+.view{display:none}.view.on{display:block}.form{display:grid;grid-template-columns:1fr 1fr;gap:9px}.form input,.form select,.form textarea,textarea{background:var(--panel2);color:var(--text);border:1px solid var(--line);border-radius:10px;padding:10px;width:100%}.form textarea{grid-column:1/-1;min-height:80px}
+.timer{text-align:center;font-size:50px;font-weight:900;margin:14px}.center{text-align:center}.hidden{display:none!important}.toast{display:none;position:fixed;right:18px;bottom:18px;background:var(--panel);padding:12px 15px;border:1px solid var(--line);border-radius:11px}
+.schedule-tabs{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.schedule-tabs .active{background:var(--mint);color:#10232d;font-weight:800}
+.day-schedule{display:grid;gap:8px}
+.schedule-event{display:grid;grid-template-columns:84px 12px 1fr auto;gap:9px;align-items:start;background:var(--panel2);padding:10px;border-radius:12px;border:1px solid var(--line)}
+.event-dot{width:10px;height:10px;border-radius:50%;margin-top:5px;background:var(--mint)}
+.week-board{display:grid;grid-template-columns:repeat(7,minmax(145px,1fr));gap:8px;overflow:auto;padding-bottom:6px}
+.week-day{background:var(--panel2);border:1px solid var(--line);border-radius:13px;padding:9px;min-height:210px}
+.week-day.today{outline:2px solid var(--mint)}
+.week-day h4{margin:0 0 8px;font-size:13px}
+.week-event{font-size:12px;padding:7px;margin:6px 0;border-radius:9px;background:var(--panel);border-left:4px solid var(--mint)}
+.category-grid{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.category-tag{font-size:11px;padding:4px 7px;border-radius:999px;background:var(--panel2);border:1px solid var(--line)}
+.days{display:flex;gap:6px;flex-wrap:wrap;grid-column:1/-1}.days label{font-size:12px;background:var(--panel2);border:1px solid var(--line);padding:6px 8px;border-radius:9px}
+
+
+
+
+
+.release-gate{display:grid;gap:8px}.gate-row{display:flex;justify-content:space-between;gap:10px;padding:9px;border-radius:9px;background:var(--panel2)}.privacy-panel{border:1px solid var(--line);background:var(--panel2);border-radius:13px;padding:12px}.privacy-list{display:grid;gap:7px}.privacy-list div{display:flex;gap:8px;align-items:flex-start}.security-note{font-size:12px;color:var(--muted);margin-top:8px}.onboard{position:fixed;inset:0;background:#081119ee;z-index:90;display:grid;place-items:center;padding:18px}.onboard.hidden{display:none}.onboard-card{width:min(680px,100%);max-height:92vh;overflow:auto}.onboard-step{display:none}.onboard-step.active{display:block}.dots{display:flex;gap:6px;margin:12px 0}.dot{width:9px;height:9px;border-radius:50%;background:var(--line)}.dot.on{background:var(--mint)}.readiness{display:grid;gap:7px}.ready-row{display:flex;justify-content:space-between;gap:12px;background:var(--panel2);padding:9px;border-radius:9px}.install-card{display:none}.install-card.show{display:block}.data-alert{display:none;background:var(--panel);border:2px solid var(--mint);border-radius:13px;padding:12px;margin-bottom:13px}.data-alert.show{display:block}
+.error-msg{font-size:12px;margin-top:5px;color:#ffb3b3}.danger{border-color:#ffb3b355}
+.undo-bar{display:none;position:fixed;left:50%;transform:translateX(-50%);bottom:85px;z-index:60;background:var(--panel);border:1px solid var(--line);padding:10px 12px;border-radius:12px;box-shadow:0 10px 35px #0005}.undo-bar.show{display:flex;gap:12px;align-items:center}
+
+.skip-link{position:fixed;left:8px;top:-80px;z-index:100;background:var(--mint);color:#10232d;padding:10px 14px;border-radius:8px;font-weight:800}.skip-link:focus{top:8px}
+:focus-visible{outline:3px solid var(--mint);outline-offset:3px}
+.sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+.timetable{display:grid;grid-template-columns:repeat(5,minmax(140px,1fr));gap:8px;overflow:auto}.school-day{background:var(--panel2);border:1px solid var(--line);border-radius:13px;padding:9px;min-height:180px}.class-block{background:var(--panel);border-left:4px solid var(--mint);border-radius:9px;padding:8px;margin:7px 0;font-size:12px}
+.reminder-box{background:var(--panel2);border:1px solid var(--line);border-radius:13px;padding:12px}
+@media(max-width:700px){.timetable{grid-template-columns:repeat(5,minmax(155px,1fr))}}
+
+.theme-swatches{display:flex;gap:8px;flex-wrap:wrap}.swatch{width:38px;height:38px;border-radius:50%;border:3px solid transparent;cursor:pointer}.swatch.active{border-color:var(--text)}
+.celebrate{animation:popIn .45s ease both}.level-card{position:relative;overflow:hidden}.level-card:after{content:"";position:absolute;inset:auto -30px -45px auto;width:130px;height:130px;border-radius:50%;background:#57d6a615}
+.weekly-win{font-size:18px;font-weight:800}.reminder-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}
+@keyframes popIn{0%{transform:scale(.94);opacity:.2}70%{transform:scale(1.03)}100%{transform:scale(1);opacity:1}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}}
+
+.academic-tabs{display:flex;gap:7px;flex-wrap:wrap;margin:0 0 12px}.academic-tabs button.active{background:var(--mint);color:#10232d;font-weight:800}
+.course-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.course-card{background:var(--panel2);border:1px solid var(--line);border-radius:13px;padding:12px}
+.grade-big{font-size:28px;font-weight:900}.status{font-size:11px;padding:4px 7px;border-radius:999px;background:#57d6a61a;color:var(--mint);display:inline-block}
+.project-step{display:flex;gap:8px;align-items:center;padding:7px 0;border-bottom:1px solid var(--line)}.project-step:last-child{border-bottom:0}
+.goal-card{background:var(--panel2);border:1px solid var(--line);border-radius:13px;padding:12px}.goal-card textarea{margin-top:8px}
+.note-card{background:var(--panel2);border:1px solid var(--line);border-radius:13px;padding:12px}
+@media(max-width:700px){.course-grid{grid-template-columns:1fr}
+
+
+.release-gate{display:grid;gap:8px}.gate-row{display:flex;justify-content:space-between;gap:10px;padding:9px;border-radius:9px;background:var(--panel2)}.privacy-panel{border:1px solid var(--line);background:var(--panel2);border-radius:13px;padding:12px}.privacy-list{display:grid;gap:7px}.privacy-list div{display:flex;gap:8px;align-items:flex-start}.security-note{font-size:12px;color:var(--muted);margin-top:8px}.onboard{position:fixed;inset:0;background:#081119ee;z-index:90;display:grid;place-items:center;padding:18px}.onboard.hidden{display:none}.onboard-card{width:min(680px,100%);max-height:92vh;overflow:auto}.onboard-step{display:none}.onboard-step.active{display:block}.dots{display:flex;gap:6px;margin:12px 0}.dot{width:9px;height:9px;border-radius:50%;background:var(--line)}.dot.on{background:var(--mint)}.readiness{display:grid;gap:7px}.ready-row{display:flex;justify-content:space-between;gap:12px;background:var(--panel2);padding:9px;border-radius:9px}.install-card{display:none}.install-card.show{display:block}.data-alert{display:none;background:var(--panel);border:2px solid var(--mint);border-radius:13px;padding:12px;margin-bottom:13px}.data-alert.show{display:block}
+.error-msg{font-size:12px;margin-top:5px;color:#ffb3b3}.danger{border-color:#ffb3b355}
+.undo-bar{display:none;position:fixed;left:50%;transform:translateX(-50%);bottom:85px;z-index:60;background:var(--panel);border:1px solid var(--line);padding:10px 12px;border-radius:12px;box-shadow:0 10px 35px #0005}.undo-bar.show{display:flex;gap:12px;align-items:center}
+
+.skip-link{position:fixed;left:8px;top:-80px;z-index:100;background:var(--mint);color:#10232d;padding:10px 14px;border-radius:8px;font-weight:800}.skip-link:focus{top:8px}
+:focus-visible{outline:3px solid var(--mint);outline-offset:3px}
+.sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+.timetable{display:grid;grid-template-columns:repeat(5,minmax(140px,1fr));gap:8px;overflow:auto}.school-day{background:var(--panel2);border:1px solid var(--line);border-radius:13px;padding:9px;min-height:180px}.class-block{background:var(--panel);border-left:4px solid var(--mint);border-radius:9px;padding:8px;margin:7px 0;font-size:12px}
+.reminder-box{background:var(--panel2);border:1px solid var(--line);border-radius:13px;padding:12px}
+@media(max-width:700px){.timetable{grid-template-columns:repeat(5,minmax(155px,1fr))}}
+
+.theme-swatches{display:flex;gap:8px;flex-wrap:wrap}.swatch{width:38px;height:38px;border-radius:50%;border:3px solid transparent;cursor:pointer}.swatch.active{border-color:var(--text)}
+.celebrate{animation:popIn .45s ease both}.level-card{position:relative;overflow:hidden}.level-card:after{content:"";position:absolute;inset:auto -30px -45px auto;width:130px;height:130px;border-radius:50%;background:#57d6a615}
+.weekly-win{font-size:18px;font-weight:800}.reminder-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}
+@keyframes popIn{0%{transform:scale(.94);opacity:.2}70%{transform:scale(1.03)}100%{transform:scale(1);opacity:1}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}}
+
+.academic-tabs{overflow:auto;flex-wrap:nowrap}.academic-tabs button{min-width:max-content}}
+
+
+
+.study-presets{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}
+.study-presets .selected{box-shadow:0 0 0 2px rgba(87,214,166,.22)}
+.study-custom{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:end;margin:8px 0 4px}
+.study-custom label{grid-column:1/-1}
+.study-custom input{background:var(--panel2);color:var(--text);border:1px solid var(--line);border-radius:10px;padding:10px;width:100%}
+@media(max-width:700px){.study-presets{grid-template-columns:repeat(2,1fr)}}
+
+.phone-week{display:none}
+.time-pill{font-weight:800;white-space:nowrap}
+.ampm-group{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.ampm-btn{border:1px solid var(--line);background:var(--panel2);color:var(--muted);border-radius:10px;padding:10px;font-weight:800;cursor:pointer}
+.ampm-btn[aria-pressed="true"]{background:var(--mint);color:#10232d;border-color:var(--mint);box-shadow:0 0 0 2px rgba(87,214,166,.18)}
+@media(max-width:700px){.week-board{display:none!important}.phone-week{display:grid;gap:10px}.phone-day{background:var(--panel2);border:1px solid var(--line);border-radius:13px;padding:11px}.phone-day h4{margin:0 0 8px}.help-search{display:grid;grid-template-columns:1fr}.help-search .btn{width:100%}}
+
+.help-search{display:flex;gap:8px;margin:10px 0 14px}.help-search input{flex:1;background:var(--panel2);color:var(--text);border:1px solid var(--line);border-radius:10px;padding:10px}
+.help-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.help-topic{background:var(--panel2);border:1px solid var(--line);border-radius:13px;padding:12px}
+.help-topic h4{margin:0 0 7px}.steps{margin:7px 0 0;padding-left:20px;color:var(--muted)}.steps li{margin:5px 0}
+.setup-check{display:grid;gap:7px}.setup-check label{display:flex;gap:9px;align-items:flex-start;background:var(--panel2);padding:10px;border-radius:10px;border:1px solid var(--line)}
+.context-help{border:0;background:transparent;color:var(--mint);font-weight:900;min-height:auto;padding:2px 5px;cursor:pointer}
+.help-tip{display:none;margin-top:7px;padding:9px;border-radius:10px;background:#57d6a612;color:var(--muted);border:1px solid #57d6a62c}
+.help-tip.open{display:block}
+@media(max-width:700px){.help-grid{grid-template-columns:1fr}
+
+
+
+.release-gate{display:grid;gap:8px}.gate-row{display:flex;justify-content:space-between;gap:10px;padding:9px;border-radius:9px;background:var(--panel2)}.privacy-panel{border:1px solid var(--line);background:var(--panel2);border-radius:13px;padding:12px}.privacy-list{display:grid;gap:7px}.privacy-list div{display:flex;gap:8px;align-items:flex-start}.security-note{font-size:12px;color:var(--muted);margin-top:8px}.onboard{position:fixed;inset:0;background:#081119ee;z-index:90;display:grid;place-items:center;padding:18px}.onboard.hidden{display:none}.onboard-card{width:min(680px,100%);max-height:92vh;overflow:auto}.onboard-step{display:none}.onboard-step.active{display:block}.dots{display:flex;gap:6px;margin:12px 0}.dot{width:9px;height:9px;border-radius:50%;background:var(--line)}.dot.on{background:var(--mint)}.readiness{display:grid;gap:7px}.ready-row{display:flex;justify-content:space-between;gap:12px;background:var(--panel2);padding:9px;border-radius:9px}.install-card{display:none}.install-card.show{display:block}.data-alert{display:none;background:var(--panel);border:2px solid var(--mint);border-radius:13px;padding:12px;margin-bottom:13px}.data-alert.show{display:block}
+.error-msg{font-size:12px;margin-top:5px;color:#ffb3b3}.danger{border-color:#ffb3b355}
+.undo-bar{display:none;position:fixed;left:50%;transform:translateX(-50%);bottom:85px;z-index:60;background:var(--panel);border:1px solid var(--line);padding:10px 12px;border-radius:12px;box-shadow:0 10px 35px #0005}.undo-bar.show{display:flex;gap:12px;align-items:center}
+
+.skip-link{position:fixed;left:8px;top:-80px;z-index:100;background:var(--mint);color:#10232d;padding:10px 14px;border-radius:8px;font-weight:800}.skip-link:focus{top:8px}
+:focus-visible{outline:3px solid var(--mint);outline-offset:3px}
+.sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+.timetable{display:grid;grid-template-columns:repeat(5,minmax(140px,1fr));gap:8px;overflow:auto}.school-day{background:var(--panel2);border:1px solid var(--line);border-radius:13px;padding:9px;min-height:180px}.class-block{background:var(--panel);border-left:4px solid var(--mint);border-radius:9px;padding:8px;margin:7px 0;font-size:12px}
+.reminder-box{background:var(--panel2);border:1px solid var(--line);border-radius:13px;padding:12px}
+@media(max-width:700px){.timetable{grid-template-columns:repeat(5,minmax(155px,1fr))}}
+
+.theme-swatches{display:flex;gap:8px;flex-wrap:wrap}.swatch{width:38px;height:38px;border-radius:50%;border:3px solid transparent;cursor:pointer}.swatch.active{border-color:var(--text)}
+.celebrate{animation:popIn .45s ease both}.level-card{position:relative;overflow:hidden}.level-card:after{content:"";position:absolute;inset:auto -30px -45px auto;width:130px;height:130px;border-radius:50%;background:#57d6a615}
+.weekly-win{font-size:18px;font-weight:800}.reminder-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}
+@keyframes popIn{0%{transform:scale(.94);opacity:.2}70%{transform:scale(1.03)}100%{transform:scale(1);opacity:1}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}}
+
+.academic-tabs{display:flex;gap:7px;flex-wrap:wrap;margin:0 0 12px}.academic-tabs button.active{background:var(--mint);color:#10232d;font-weight:800}
+.course-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.course-card{background:var(--panel2);border:1px solid var(--line);border-radius:13px;padding:12px}
+.grade-big{font-size:28px;font-weight:900}.status{font-size:11px;padding:4px 7px;border-radius:999px;background:#57d6a61a;color:var(--mint);display:inline-block}
+.project-step{display:flex;gap:8px;align-items:center;padding:7px 0;border-bottom:1px solid var(--line)}.project-step:last-child{border-bottom:0}
+.goal-card{background:var(--panel2);border:1px solid var(--line);border-radius:13px;padding:12px}.goal-card textarea{margin-top:8px}
+.note-card{background:var(--panel2);border:1px solid var(--line);border-radius:13px;padding:12px}
+@media(max-width:700px){.course-grid{grid-template-columns:1fr}
+
+
+.release-gate{display:grid;gap:8px}.gate-row{display:flex;justify-content:space-between;gap:10px;padding:9px;border-radius:9px;background:var(--panel2)}.privacy-panel{border:1px solid var(--line);background:var(--panel2);border-radius:13px;padding:12px}.privacy-list{display:grid;gap:7px}.privacy-list div{display:flex;gap:8px;align-items:flex-start}.security-note{font-size:12px;color:var(--muted);margin-top:8px}.onboard{position:fixed;inset:0;background:#081119ee;z-index:90;display:grid;place-items:center;padding:18px}.onboard.hidden{display:none}.onboard-card{width:min(680px,100%);max-height:92vh;overflow:auto}.onboard-step{display:none}.onboard-step.active{display:block}.dots{display:flex;gap:6px;margin:12px 0}.dot{width:9px;height:9px;border-radius:50%;background:var(--line)}.dot.on{background:var(--mint)}.readiness{display:grid;gap:7px}.ready-row{display:flex;justify-content:space-between;gap:12px;background:var(--panel2);padding:9px;border-radius:9px}.install-card{display:none}.install-card.show{display:block}.data-alert{display:none;background:var(--panel);border:2px solid var(--mint);border-radius:13px;padding:12px;margin-bottom:13px}.data-alert.show{display:block}
+.error-msg{font-size:12px;margin-top:5px;color:#ffb3b3}.danger{border-color:#ffb3b355}
+.undo-bar{display:none;position:fixed;left:50%;transform:translateX(-50%);bottom:85px;z-index:60;background:var(--panel);border:1px solid var(--line);padding:10px 12px;border-radius:12px;box-shadow:0 10px 35px #0005}.undo-bar.show{display:flex;gap:12px;align-items:center}
+
+.skip-link{position:fixed;left:8px;top:-80px;z-index:100;background:var(--mint);color:#10232d;padding:10px 14px;border-radius:8px;font-weight:800}.skip-link:focus{top:8px}
+:focus-visible{outline:3px solid var(--mint);outline-offset:3px}
+.sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+.timetable{display:grid;grid-template-columns:repeat(5,minmax(140px,1fr));gap:8px;overflow:auto}.school-day{background:var(--panel2);border:1px solid var(--line);border-radius:13px;padding:9px;min-height:180px}.class-block{background:var(--panel);border-left:4px solid var(--mint);border-radius:9px;padding:8px;margin:7px 0;font-size:12px}
+.reminder-box{background:var(--panel2);border:1px solid var(--line);border-radius:13px;padding:12px}
+@media(max-width:700px){.timetable{grid-template-columns:repeat(5,minmax(155px,1fr))}}
+
+.theme-swatches{display:flex;gap:8px;flex-wrap:wrap}.swatch{width:38px;height:38px;border-radius:50%;border:3px solid transparent;cursor:pointer}.swatch.active{border-color:var(--text)}
+.celebrate{animation:popIn .45s ease both}.level-card{position:relative;overflow:hidden}.level-card:after{content:"";position:absolute;inset:auto -30px -45px auto;width:130px;height:130px;border-radius:50%;background:#57d6a615}
+.weekly-win{font-size:18px;font-weight:800}.reminder-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}
+@keyframes popIn{0%{transform:scale(.94);opacity:.2}70%{transform:scale(1.03)}100%{transform:scale(1);opacity:1}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}}
+
+.academic-tabs{overflow:auto;flex-wrap:nowrap}.academic-tabs button{min-width:max-content}}
+
+.help-search{position:sticky;top:0;background:var(--bg);padding:5px 0;z-index:2}}
+
+@media(max-width:1100px) and (min-width:701px){
+      .app{grid-template-columns:190px 1fr}.side{padding:16px 10px}
+      main{padding:18px}.s3{grid-column:span 6}.s4{grid-column:span 6}.s5,.s6,.s7,.s8{grid-column:span 12}
+      .week-board{grid-template-columns:repeat(7,minmax(135px,1fr))}
+    }
+    @media(max-width:700px){
+      .app{display:block}.side{display:none}main{padding:14px 12px 92px}
+      .top{align-items:flex-start}.top h1{font-size:22px}.top .btn:not(.primary){display:none}
+      .grid{gap:10px}.s3{grid-column:span 6}.s4,.s5,.s6,.s7,.s8,.s12{grid-column:span 12}
+      .card{padding:13px;border-radius:15px}.metric{font-size:27px}
+      .schedule-event{grid-template-columns:65px 10px 1fr}.schedule-event .btn{grid-column:3}
+      .week-board{grid-template-columns:repeat(7,minmax(150px,1fr))}
+      .form{grid-template-columns:1fr}.form textarea,.days{grid-column:1}
+      .mobilebar{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;left:0;right:0;bottom:0;z-index:30;background:#10232df5;border-top:1px solid #ffffff20;padding:7px 6px calc(7px + env(safe-area-inset-bottom,0px));backdrop-filter:blur(12px)}
+      .mobilebar button{border:0;background:transparent;color:#dce9eb;display:grid;place-items:center;gap:2px;font-size:11px;min-height:52px;border-radius:10px}
+      .mobilebar button span{font-size:20px}.mobilebar button.on{background:#57d6a620;color:white}
+      .quick{grid-template-columns:repeat(2,1fr)}
+    }
+    @media(max-width:390px){.s3{grid-column:span 12}.top .primary{padding:9px 10px}.metric{font-size:25px}}
+
+@media(max-width:700px){
+  .modal{align-items:flex-start;padding:14px;padding-bottom:120px;overflow-y:auto}
+  .modal>.card{max-height:none;margin-bottom:100px}
+  #activityModal .card{padding-bottom:40px}
+}
+
+.floating-help{
+ position:fixed;right:16px;bottom:92px;z-index:120;
+ border:1px solid var(--line);background:var(--mint);color:#10232d;
+ border-radius:999px;padding:12px 16px;font-weight:900;
+ box-shadow:0 8px 30px rgba(0,0,0,.28)
+}
+@media(min-width:701px){.floating-help{bottom:24px}}
+
+
+@media(max-width:700px){
+  #activityModal{
+    align-items:flex-start;
+    padding:12px 12px calc(160px + env(safe-area-inset-bottom));
+    overflow-y:auto
+  }
+  #activityModal>.card{
+    max-height:none;
+    margin:0 0 calc(140px + env(safe-area-inset-bottom));
+    padding-bottom:28px
+  }
+  #activityModal .activity-actions{
+    position:sticky;
+    bottom:calc(86px + env(safe-area-inset-bottom));
+    background:var(--panel);
+    padding:12px 0 6px;
+    z-index:8
+  }
+  #activityModal #saveActivityBtn,
+  #activityModal #deleteActivityBtn{min-height:52px}
+}
+
+
+@media(max-width:700px){
+ #activityModal{padding-bottom:24px!important}
+ #activityModal>.card{margin-bottom:24px!important;padding-bottom:28px!important}
+ #activityModal .activity-actions{position:static!important;background:var(--panel);padding:14px 0 6px!important;display:grid;grid-template-columns:1fr;gap:10px}
+ #activityModal #saveActivityBtn,#activityModal #deleteActivityBtn{width:100%;min-height:54px}
+}
+
+
+.completion-control{display:grid;justify-items:center;gap:4px;min-width:72px}
+.check-btn{width:44px;height:44px;border-radius:50%;border:2px solid var(--line);background:var(--panel);color:var(--muted);font-weight:900;font-size:20px;cursor:pointer}
+.check-btn.checked{background:var(--mint);color:#10232d;border-color:var(--mint)}
+.completed-item{opacity:.82}
+.completed-item strong{text-decoration:line-through;text-decoration-thickness:1px}
+
+
+.completed-section{margin-top:16px;border-top:1px solid var(--line);padding-top:12px}
+.completed-section summary{cursor:pointer;font-weight:900;padding:8px 0}
+.completed-section .list{margin-top:8px}
+
+@media(max-width:700px){
+ #activityModal{
+   display:block !important;
+   overflow-y:auto !important;
+   overscroll-behavior:contain;
+   -webkit-overflow-scrolling:touch;
+   padding:12px 12px calc(180px + env(safe-area-inset-bottom)) !important;
+   height:100dvh;
+   max-height:100dvh;
+ }
+ #activityModal.hidden{display:none !important}
+ #activityModal>.card{
+   width:100% !important;
+   max-height:none !important;
+   overflow:visible !important;
+   margin:0 0 220px !important;
+   padding-bottom:40px !important;
+ }
+ #activityModal .form{padding-bottom:80px}
+ #activityModal input,#activityModal select,#activityModal textarea{scroll-margin-bottom:48vh}
+ body.modal-open{overflow:hidden}
+}
+
+.celebration-overlay{
+  position:fixed;inset:0;z-index:200;display:grid;place-items:center;
+  background:rgba(8,17,25,.32);pointer-events:none;padding:20px
+}
+.celebration-overlay.hidden{display:none}
+.celebration-card{
+  width:min(420px,92vw);background:var(--panel);border:2px solid var(--mint);
+  border-radius:22px;padding:26px;text-align:center;box-shadow:0 18px 60px rgba(0,0,0,.35)
+}
+.celebration-icon{font-size:52px;line-height:1;margin-bottom:10px}
+.celebration-title{font-size:26px;font-weight:900}
+.celebration-text{margin-top:6px;color:var(--muted);font-weight:700}
+
+.celebrate-check .celebration-card{animation:checkBurst 1.2s ease both}
+.celebrate-study .celebration-card{animation:studyPulse 1.25s ease both}
+.celebrate-streak .celebration-card{animation:streakRise 1.25s ease both}
+.celebrate-project .celebration-card{animation:projectSpin 1.3s ease both}
+.celebrate-level .celebration-card{animation:levelFlash 1.5s ease both}
+
+@keyframes checkBurst{
+  0%{transform:scale(.72);opacity:0}
+  45%{transform:scale(1.08)}
+  70%{transform:scale(.98)}
+  100%{transform:scale(1);opacity:1}
+}
+@keyframes studyPulse{
+  0%{transform:scale(.88);opacity:0}
+  35%{transform:scale(1.03)}
+  60%{transform:scale(.97)}
+  100%{transform:scale(1);opacity:1}
+}
+@keyframes streakRise{
+  0%{transform:translateY(28px);opacity:0}
+  50%{transform:translateY(-6px)}
+  100%{transform:translateY(0);opacity:1}
+}
+@keyframes projectSpin{
+  0%{transform:rotate(-8deg) scale(.8);opacity:0}
+  55%{transform:rotate(5deg) scale(1.04)}
+  100%{transform:rotate(0) scale(1);opacity:1}
+}
+@keyframes levelFlash{
+  0%{transform:scale(.75);opacity:0;filter:brightness(1)}
+  35%{transform:scale(1.12);filter:brightness(1.35)}
+  65%{transform:scale(.98)}
+  100%{transform:scale(1);opacity:1;filter:brightness(1)}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .celebration-card{animation:none!important}
+}
+
+
+.level-display{display:flex;align-items:center;gap:12px}
+.level-trophy{font-size:34px;line-height:1;filter:drop-shadow(0 4px 8px rgba(0,0,0,.18))}
+.level-trophy.large{font-size:48px}
+.trophy-card{overflow:hidden}
+.trophy-case{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.trophy-item{
+ display:grid;place-items:center;min-width:68px;padding:10px 8px;border:1px solid var(--line);
+ border-radius:14px;background:rgba(255,255,255,.035);font-weight:900
+}
+.trophy-item .icon{font-size:28px}.trophy-item .lvl{font-size:11px;color:var(--muted);margin-top:5px}
+.trophy-item.locked{opacity:.28;filter:grayscale(1)}
+
+.time-select-row{display:grid;grid-template-columns:minmax(74px,1fr) auto minmax(74px,1fr) minmax(84px,1fr);gap:8px;align-items:center}
+.time-select-row select{min-height:46px;font-size:16px}
+.time-colon{font-size:22px;font-weight:900;text-align:center}
+@media(max-width:390px){
+ .time-select-row{grid-template-columns:minmax(64px,1fr) auto minmax(64px,1fr) minmax(76px,1fr);gap:6px}
+}
+
+
+@media(max-width:700px){
+  #assignmentEditModal{
+    display:block!important;
+    overflow-y:auto!important;
+    -webkit-overflow-scrolling:touch;
+    padding:12px 12px calc(150px + env(safe-area-inset-bottom))!important;
+  }
+  #assignmentEditModal.hidden{display:none!important}
+  #assignmentEditModal>.card{
+    width:100%!important;
+    max-height:none!important;
+    overflow:visible!important;
+    margin:0 0 180px!important;
+  }
+  #assignmentEditModal input,
+  #assignmentEditModal textarea,
+  #assignmentEditModal select{scroll-margin-bottom:45vh}
+}
+
+
+.mobile-menu-btn{display:none}
+.mobile-menu-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:130}
+.mobile-menu-drawer{position:fixed;top:0;right:0;bottom:0;width:min(340px,88vw);z-index:140;background:var(--panel);border-left:1px solid var(--line);padding:18px;overflow-y:auto;box-shadow:-18px 0 50px rgba(0,0,0,.28)}
+.mobile-full-nav{display:grid;gap:7px;margin-top:16px}
+.mobile-full-nav button{width:100%;text-align:left;border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:12px;padding:12px 14px;font-weight:800;min-height:46px}
+.mobile-full-nav button.on{background:rgba(87,214,166,.16);border-color:var(--mint)}
+@media(max-width:700px){.mobile-menu-btn{display:inline-flex}}
+
+/* Cross-device left navigation: allow independent vertical scroll on short landscape viewports */
+.side{
+  min-height:0;
+  overflow:hidden;
+}
+.side .nav{
+  min-height:0;
+}
+@media (min-width:701px) and (max-height:600px){
+  .side{
+    height:100dvh;
+    max-height:100dvh;
+    overflow:hidden;
+  }
+  .side .nav{
+    flex:1 1 auto;
+    overflow-y:auto;
+    overscroll-behavior:contain;
+    -webkit-overflow-scrolling:touch;
+    padding-bottom:18px;
+    scrollbar-gutter:stable;
+  }
+  .side .brand,
+  .side .foot{
+    flex:0 0 auto;
+  }
+}
+/* Safari fallback where dvh is not fully honored */
+@supports (-webkit-touch-callout:none){
+  @media (min-width:701px) and (max-height:600px){
+    .side{height:100vh;max-height:100vh}
+    .side .nav{overflow-y:scroll}
+  }
+}
+
+
+.mobile-brand-lockup{display:none}
+.mobile-menu-note{margin:12px 0 6px;color:var(--muted);font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.08em}
+@media(max-width:700px){
+ .top{align-items:flex-start;gap:10px}
+ .mobile-brand-lockup{
+   display:flex;align-items:center;gap:8px;margin-bottom:8px;
+ }
+ .mobile-brand-mark{
+   width:32px;height:32px;border-radius:10px;display:grid;place-items:center;
+   background:var(--mint);color:#10232d;font-weight:1000;font-size:12px;flex:0 0 auto
+ }
+ .mobile-brand-lockup strong{display:block;font-size:13px;line-height:1.1}
+ .mobile-brand-lockup small{display:block;font-size:8px;letter-spacing:.09em;color:var(--muted);margin-top:3px}
+ #mobileMenuBtn{font-weight:900;border-color:var(--mint)}
+ .top .actions{gap:6px;flex-wrap:wrap;justify-content:flex-end}
+ .top .actions .btn{min-height:42px}
+}
+@media(max-width:390px){
+ .mobile-brand-lockup strong{font-size:12px}
+ #mobileMenuBtn{padding-left:10px;padding-right:10px}
+}
+
+
+@media(max-width:700px){
+  .mobilebar{
+    display:flex!important;
+    overflow-x:auto;
+    overflow-y:hidden;
+    justify-content:flex-start;
+    gap:2px;
+    scroll-snap-type:x proximity;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+    padding-left:6px;
+    padding-right:6px;
+  }
+  .mobilebar::-webkit-scrollbar{display:none}
+  .mobilebar button{
+    flex:0 0 82px;
+    min-width:82px;
+    scroll-snap-align:start;
+    white-space:nowrap;
+  }
+  .mobilebar:after{
+    content:'›';
+    flex:0 0 16px;
+    display:grid;
+    place-items:center;
+    color:var(--muted);
+    font-weight:900;
+  }
+}
+
+
+@media(max-width:700px){
+ #courseModal{display:block!important;overflow-y:auto!important;-webkit-overflow-scrolling:touch;padding:12px 12px calc(170px + env(safe-area-inset-bottom))!important}
+ #courseModal.hidden{display:none!important}
+ #courseModal>.card{width:100%!important;max-height:none!important;overflow:visible!important;margin:0 0 200px!important}
+ #courseModal input,#courseModal select{scroll-margin-bottom:45vh}
+}
+
+
+.day-type-form{grid-template-columns:repeat(3,minmax(0,1fr)) auto}
+@media(max-width:700px){.day-type-form{grid-template-columns:1fr 1fr}.day-type-form select,.day-type-form button{grid-column:span 2}}
+
+.schedule-day-card{
+ border:1px solid var(--line);
+ border-radius:16px;
+ background:var(--panel2);
+ margin:0 0 12px;
+ overflow:hidden;
+}
+.schedule-day-card.today-day{border-color:var(--mint);box-shadow:0 0 0 1px rgba(87,214,166,.18)}
+.schedule-day-head{
+ display:flex;align-items:center;justify-content:space-between;gap:12px;
+ padding:12px 14px;border-bottom:1px solid var(--line);
+ background:rgba(255,255,255,.025)
+}
+.schedule-day-head strong{display:block;font-size:16px}
+.schedule-day-head .muted{display:block;margin-top:2px;font-size:12px}
+.schedule-day-items{display:grid}
+.schedule-day-items .schedule-event{border-bottom:1px solid var(--line);border-radius:0;margin:0}
+.schedule-day-items .schedule-event:last-child{border-bottom:0}
+@media(max-width:700px){
+ .schedule-day-card{margin-bottom:10px}
+ .schedule-day-head{position:sticky;top:0;z-index:2;backdrop-filter:blur(8px)}
+}
+
+.schedule-meta{display:block;margin-top:3px}.grade-chip{display:inline-block;padding:3px 7px;border-radius:999px;background:var(--panel);border:1px solid var(--line);font-weight:800}.grade-form{display:grid;grid-template-columns:1fr 1fr;gap:9px}.grade-form .wide{grid-column:1/-1}@media(max-width:700px){.grade-form{grid-template-columns:1fr}}
+</style>
+</head><body data-theme="dark"><a class="skip-link" href="#mainContent">Skip to main content</a>
+<div class="app"><aside class="side"><div class="brand"><div class="logo">PM</div><div><b>Student Command Center</b><small>PROGRESSMINT STUDIOS</small></div></div>
+<div class="nav" id="nav"><button class="on" data-v="dash">🏠 Dashboard</button><button data-v="assign">✅ Assignments</button><button data-v="exams">🧠 Exams</button><button data-v="academics">🎓 Academics</button><button data-v="schedule">📅 Full Schedule</button><button data-v="study">⏱ Study Mode</button><button data-v="progress">🏆 Progress</button><button data-v="parent">👨‍👩‍👧 Parent Updates</button><button data-v="help">❓ Help</button><button data-v="settings">⚙️ Settings</button></div><div class="foot">Plan • Focus • Progress</div></aside>
+<main id="mainContent" tabindex="-1"><div id="storageAlert" class="data-alert" role="alert"></div><div class="top"><div class="mobile-brand-lockup" aria-label="Student Command Center by ProgressMint Studios"><div class="mobile-brand-mark">PM</div><div><strong>Student Command Center</strong><small>PROGRESSMINT STUDIOS</small></div></div><div><h1 id="title">Dashboard</h1><div class="muted" id="hello"></div></div><div class="actions"><button id="mobileMenuBtn" class="btn mobile-menu-btn" onclick="openMobileMenu()" aria-label="Open all features" aria-controls="mobileMenu" aria-expanded="false">☰ Menu</button><button class="btn" onclick="openGlobalHelp()">❓ Help</button><button class="btn" id="theme">☀️ Theme</button><button id="headerQuickAdd" class="btn primary" onclick="openAdd()">+ Quick Add</button></div></div>
+
+<section id="dash" class="view on"><div class="grid">
+<div class="card s3"><span class="pill">THIS WEEK</span><div class="metric" id="dueN">0</div><div class="muted">assignments due</div></div>
+<div class="card s3"><span class="pill">EXAMS</span><div class="metric" id="examN">0</div><div class="muted">coming up</div></div>
+<div class="card s3"><span class="pill">STREAK</span><div class="metric"><span id="streak">3</span> 🔥</div><div class="muted">study days</div></div>
+<div class="card s3 level-card"><span class="pill">LEVEL</span><div class="level-display"><div class="metric" id="level">1</div><div id="dashboardTrophy" class="level-trophy" aria-label="Current level trophy">🥉</div></div><div class="muted"><span id="xp">120</span> XP • <span id="nextLevel">80</span> to next level</div></div>
+<div class="card s7"><div class="row"><h3>Needs your attention</h3><span class="muted">Priority first</span></div><div id="attention" class="list"></div></div>
+<div class="card s5"><h3>Progress</h3><div class="row"><span>Assignments completed</span><b id="pct">0%</b></div><div class="progress"><span id="bar"></span></div><br><div class="item"><strong>🌱 Momentum Builder</strong><span class="muted">XP rewards planning, consistency and finished work — not grades.</span></div></div>
+<div class="card s8"><div class="row"><h3>Due this week</h3><button class="btn" onclick="show('assign')">View all</button></div><div id="week" class="list"></div></div>
+<div class="card s4"><h3>Smart Check-In</h3><div id="smartCheck" class="reminder-box" aria-live="polite"></div></div>
+<div class="card s4"><h3>Weekly Wins</h3><div id="weeklyWins" class="list"></div></div>
+<div class="card s8"><div class="row"><h3>Today — complete schedule</h3><button class="btn" onclick="show('schedule')">Open schedule</button></div><div id="todaySnapshot" class="day-schedule"></div></div>
+<div class="card s12"><div class="row"><h3>Upcoming Schedule</h3><button class="btn" onclick="show('schedule')">Open Schedule</button></div><div id="dashboardUpcomingSchedule" class="list"></div></div></div></section>
+
+<section id="assign" class="view"><div class="card"><div class="row"><h3>Assignments</h3><button class="btn primary" onclick="openAdd('assignment')">+ Add</button></div><div id="alist" class="list"></div>
+<details class="completed-section">
+<summary>✅ Completed Assignments <span id="completedAssignmentCount" class="muted"></span></summary>
+<div id="completedAssignmentList" class="list"></div><p class="muted">Completed assignments stay here for 7 days. Earned XP and progress remain credited.</p>
+</details></div></section>
+<section id="exams" class="view"><div class="card"><div class="row"><div><h3>Exams & Quizzes</h3><div class="muted">Add, review, complete, or edit upcoming tests and quizzes.</div></div><button class="btn primary" onclick="openAdd('exam')">+ Add exam</button></div><div id="elist" class="list"></div></div></section>
+
+
+<section id="academics" class="view">
+<div class="grid">
+ <div class="card s12">
+   <div class="row"><div><h3>Academic Command Center</h3><div class="muted">Courses, projects, grades, semester goals and notes in one place.</div></div><button class="btn" onclick="show('help')">How-to</button></div>
+   <div class="academic-tabs">
+     <button class="btn active" data-a="courses" onclick="academicTab('courses')">Courses</button>
+     <button class="btn" data-a="projects" onclick="academicTab('projects')">Projects</button>
+     <button class="btn" data-a="grades" onclick="academicTab('grades')">Grades</button>
+     <button class="btn" data-a="goals" onclick="academicTab('goals')">Semester Goals</button>
+     <button class="btn" data-a="notes" onclick="academicTab('notes')">Notes</button>
+   </div>
+ </div>
+
+ <div id="acad-courses" class="card s12 acad-panel">
+   <div class="row"><h3>Courses & Classes</h3><button class="btn primary" onclick="openCourse()">+ Add course</button></div>
+   <div id="courseList" class="course-grid"></div>
+   <br><div class="row"><div><h3>Class Schedule Settings</h3><div class="muted">Manage class days and normal/alternate times here. View the actual day-in-the-life schedule in Schedule.</div></div><button class="btn" onclick="show('schedule')">Open unified Schedule</button></div>
+ </div>
+
+ <div id="acad-projects" class="card s12 acad-panel hidden">
+   <div class="row"><h3>Projects</h3><button class="btn primary" onclick="openProject()">+ Add project</button></div>
+   <p class="muted">Break big assignments into smaller milestones so the next step is always visible.</p>
+   <div id="projectList" class="list"></div>
+ </div>
+
+ <div id="acad-grades" class="card s12 acad-panel hidden">
+   <div class="row"><h3>Grade Tracker</h3><button class="btn primary" onclick="openGrade()">+ Add grade</button></div>
+   <p class="muted">Track entered results by course. This is a planning estimate, not an official school gradebook.</p>
+   <div id="gradeList" class="course-grid"></div>
+ </div>
+
+ <div id="acad-goals" class="card s12 acad-panel hidden">
+   <div class="row"><h3>Semester Goals</h3><button class="btn primary" onclick="openGoal()">+ Add goal</button></div>
+   <p class="muted">Connect an outcome you care about with actions you can control.</p>
+   <div id="goalList" class="course-grid"></div>
+ </div>
+
+ <div id="acad-notes" class="card s12 acad-panel hidden">
+   <div class="row"><h3>Notes</h3><button class="btn primary" onclick="openNote()">+ Add note</button></div>
+   <div id="noteList" class="course-grid"></div>
+ </div>
+</div>
+</section>
+
+<section id="schedule" class="view">
+<div class="grid">
+  <div class="card s12">
+    <div class="row"><div><h3>Unified Student Schedule <button class="context-help" aria-label="Schedule help" onclick="toggleTip('scheduleTip')">?</button></h3><div id="scheduleTip" class="help-tip">Use this schedule for classes, deadlines and extracurriculars. Recurring activities can repeat weekly, every weekday, or on selected weekdays.</div><div class="muted">Your complete day in one place: classes, assignments, exams, sports, clubs, work, and personal commitments.</div></div><button class="btn primary" onclick="openActivity()">+ Add activity</button></div>
+    <div class="card s12 school-day-control">
+<div class="row"><div><h3>🏫 School Day Schedule</h3><div class="muted">Classes from Academics automatically appear in the overall Schedule. Override a date or date range for shortened days or no-school days.</div></div></div>
+<div class="form day-type-form">
+<input id="schoolDayStart" type="date"><input id="schoolDayEnd" type="date">
+<select id="schoolDayType"><option value="normal">Normal Day</option><option value="shortened">Shortened Day</option><option value="none">No School</option></select>
+<button class="btn primary" type="button" onclick="setSchoolDayRange()">Apply to date/range</button>
+</div>
+<p class="muted">Use the same start/end date for one shortened day, or select a range for a shortened week.</p>
+<div id="schoolDayOverrides" class="list"></div></div><div class="category-grid">
+      <span class="category-tag">📚 Academic</span><span class="category-tag">🏅 Sports</span><span class="category-tag">🎵 Band/Music</span><span class="category-tag">🎭 Theater/Arts</span><span class="category-tag">♟ Clubs</span><span class="category-tag">💼 Job / Work</span><span class="category-tag">🤝 Volunteer</span><span class="category-tag">👤 Personal</span>
+    </div>
+    <div class="schedule-tabs"><button id="dailyTab" class="btn active" onclick="setScheduleView('daily')">Daily view</button><button id="weeklyTab" class="btn" onclick="setScheduleView('weekly')">Weekly view</button></div>
+    <div id="dailySchedule" class="day-schedule"></div>
+    <div id="weeklySchedule" class="week-board hidden"></div><div id="phoneWeeklySchedule" class="phone-week hidden"></div>
+  </div>
+  <div class="card s6"><h3>Upcoming Schedule</h3><div id="activityList" class="list"></div></div>
+  <div class="card s6"><h3>Share-ready family view</h3><p class="muted">The parent update includes the student's upcoming classes, assignment due dates, exams, activities, jobs, and other scheduled commitments.</p><button class="btn" onclick="show('parent');summary()">Preview parent update</button></div>
+</div>
+</section>
+
+<section id="study" class="view"><div class="grid">
+<div class="card s6"><h3>Study Mode <button class="context-help" aria-label="Study Mode help" onclick="toggleTip('studyTip')">?</button></h3>
+<div id="studyTip" class="help-tip">Choose a focus duration that fits the task. 25 minutes is the recommended default, not a requirement. Completing a session earns capped XP based on duration.</div>
+<div class="muted">Choose a focus length</div>
+<div class="study-presets" id="studyPresets">
+<button class="btn" data-min="10" onclick="setStudyMinutes(10,this)">10 min</button>
+<button class="btn" data-min="15" onclick="setStudyMinutes(15,this)">15 min</button>
+<button class="btn primary selected" data-min="25" onclick="setStudyMinutes(25,this)">25 min</button>
+<button class="btn" data-min="30" onclick="setStudyMinutes(30,this)">30 min</button>
+<button class="btn" data-min="45" onclick="setStudyMinutes(45,this)">45 min</button>
+<button class="btn" data-min="60" onclick="setStudyMinutes(60,this)">60 min</button>
+</div>
+<div class="study-custom"><label for="customMinutes" class="muted">Custom minutes</label><input id="customMinutes" type="number" inputmode="numeric" min="5" max="120" placeholder="e.g. 20"><button class="btn" onclick="applyCustomMinutes()">Set custom</button></div>
+<div id="clock" class="timer">25:00</div>
+<div class="center"><button class="btn primary" id="start">Start</button> <button class="btn" id="reset">Reset</button></div>
+<p class="muted center" id="studyRewardText">Complete this 25-minute focus session to earn 25 XP.</p></div>
+<div class="card s6"><h3>Session goal</h3><div class="form"><input id="goal" placeholder="e.g. Finish 20 math problems" oninput="saveStudyState()"><select><option>General</option><option>Math</option><option>Science</option><option>English</option><option>History</option></select></div><p class="muted">Make the goal small and specific so finishing feels achievable.</p><br><h3>Completed focus sessions</h3><div id="studyHistory" class="list"></div></div>
+</div></section>
+<section id="progress" class="view"><div class="grid"><div class="card s12 trophy-card"><div class="row"><div><h3>🏆 Level Trophy Case</h3><p class="muted">Trophies recognize planning, focus and completed effort.</p></div><div id="progressCurrentTrophy" class="level-trophy large">🥉</div></div><div id="trophyCase" class="trophy-case" aria-label="Earned level trophies"></div></div><div class="card s12"><div class="row"><div><b>Need help using a feature?</b><div class="muted">Open the Quick Start and searchable how-to guide.</div></div><button class="btn" onclick="show('help')">Help</button></div></div><div class="card s4"><h3>Academic XP</h3><div class="metric" id="xp2">120</div><p class="muted">Earned for useful planning habits and completed work.</p></div><div class="card s8"><h3>Achievements</h3><div class="list"><div class="item"><strong>🔥 Study Streak</strong><span class="muted">Keep showing up.</span></div><div class="item"><strong>📅 Planner Ahead</strong><span class="muted">Add work before it becomes urgent.</span></div><div class="item"><strong>✅ Finisher</strong><span class="muted">Complete assignments.</span></div></div></div></div></section>
+
+<section id="help" class="view"><div class="grid"><div class="card s12"><div class="row"><div><h3>Help</h3><div class="muted">Search for what you need. Results appear directly below.</div></div><button class="btn" onclick="returnFromHelp()">Back</button></div><div class="help-search"><input id="helpSearch" type="search" placeholder="Search help — e.g. parent, assignment, schedule, backup" aria-label="Search help"><button class="btn" onclick="filterHelp()">Search</button></div><div id="helpSearchResults" class="help-grid"></div><p id="noHelp" class="muted hidden">No matching help topic. Try a simpler word.</p></div><div class="card s12"><h3>Browse all how-to topics</h3><div class="help-grid" id="helpTopics"><div class="help-topic" data-keywords="assignment grade grading percentage points letter a b c d f completed parent update">
+<h4>🎓 Add a grade to an assignment</h4><ol class="steps">
+<li>After an assignment is completed, or once its due date arrives, open Assignments.</li>
+<li>Tap Add grade beside that assignment.</li>
+<li>Choose Percentage, Points earned / possible, or Letter grade (A, B, C, D, or F).</li>
+<li>For points, the app calculates the percentage automatically. Letter grades are not converted to percentages because school grading scales differ.</li>
+<li>The entered grade stays attached to the assignment and can appear in Parent Updates. Grades do not award XP.</li>
+</ol></div>
+<div class="help-topic" data-keywords="parent update grades current recently entered report email">
+<h4>👪 Grades in Parent Updates</h4><ol class="steps">
+<li>Parent Updates include current numerical class results when entered in the planner.</li>
+<li>Recently entered assignment grades are listed with the class and assignment name.</li>
+<li>Only student-entered grades are shown; the app does not estimate missing grades.</li>
+<li>The update clearly states that planner grades are not the school's official gradebook.</li>
+</ol></div><div class="help-topic" data-keywords="upcoming schedule assignment due dates classes exams activities jobs all inclusive">
+<h4>🗓️ Upcoming Schedule on Schedule page</h4><ol class="steps">
+<li>The Upcoming Schedule section is all-inclusive, not extracurricular-only.</li>
+<li>It includes classes, assignment due dates, exams, activities, jobs, and personal commitments.</li>
+<li>Items are grouped by day and ordered by time.</li>
+<li>Assignment items are labeled Assignment Due so due dates are easy to spot.</li>
+</ol></div><div class="help-topic" data-keywords="schedule day at a glance grouped bundle day daily classes assignments exams activities jobs">
+<h4>📅 Day-at-a-glance Schedule</h4><ol class="steps">
+<li>The Unified Student Schedule groups everything by date.</li>
+<li>Each day card contains that day's classes, assignments, exams, activities, jobs, and personal commitments.</li>
+<li>Items inside each day are sorted by time so you can scan the day from morning to evening.</li>
+<li>Today's card is visually highlighted.</li>
+<li>The Dashboard Upcoming Schedule uses the same grouped-by-day view.</li>
+</ol></div><div class="help-topic" data-keywords="upcoming schedule dashboard classes assignments exams activities jobs chronological">
+<h4>🗓️ Upcoming Schedule</h4><ol class="steps">
+<li>The Dashboard's Upcoming Schedule is all-inclusive.</li>
+<li>It combines upcoming classes, assignments, exams, extracurriculars, jobs, and personal commitments.</li>
+<li>Items are grouped by day and sorted by time so you can see each day at a glance.</li>
+<li>Completed assignments and exams are not shown as upcoming.</li>
+<li>Open Schedule for the full day-in-the-life view.</li>
+</ol></div><div class="help-topic" data-keywords="exam class date notes no title add exam">
+<h4>🧠 Exams use class + date</h4><ol class="steps">
+<li>Choose Add Exam / Quiz.</li>
+<li>Select the class, choose today or a future date, and add optional notes.</li>
+<li>No separate exam title is required.</li>
+<li>The exam appears in Exams and automatically on the Unified Student Schedule.</li>
+</ol></div>
+<div class="help-topic" data-keywords="unified schedule one schedule day in the life academics extracurriculars classes assignments exams work">
+<h4>📅 One unified Schedule</h4><ol class="steps">
+<li>Schedule is the single day-in-the-life view for the app.</li>
+<li>Classes are managed in Academics but automatically appear in Schedule.</li>
+<li>Assignments, exams, activities, sports, clubs, jobs, and personal commitments also appear there.</li>
+<li>Use Normal Day, Shortened Day, or No School overrides to change which class times appear on specific dates or ranges.</li>
+</ol></div>
+<div class="help-topic" data-keywords="date dates future today no past backdate">
+<h4>📆 Date rules</h4><ol class="steps">
+<li>All new dates must be today or later.</li>
+<li>Past dates cannot be entered for assignments, exams, activities, classes, projects, or other scheduled items.</li>
+<li>This helps prevent accidental backdating.</li>
+</ol></div><div class="help-topic" data-keywords="exam add exam edit exams quiz">
+<h4>🧠 Add & edit exams</h4><ol class="steps"><li>Open Exams or choose Add Exam / Quiz from Quick Add.</li><li>Enter title, subject, date, and notes, then save.</li><li>The exam appears in Exams and the overall Schedule.</li><li>Tap Edit to change it later.</li></ol></div>
+<div class="help-topic" data-keywords="class overall schedule shortened day shortened week no school normal override academics">
+<h4>🏫 Classes in the overall Schedule</h4><ol class="steps"><li>Classes saved in Academics automatically appear in Daily and Weekly Schedule views.</li><li>Use Schedule → School Day Schedule to mark a date Shortened Day or No School.</li><li>Shortened Day uses each class's saved alternate times.</li><li>Select a date range to apply a shortened schedule to several days or a full week.</li><li>Restore Normal to return those dates to standard class times.</li></ol></div><div class="help-topic" data-keywords="bottom navigation scroll swipe one hand portrait all features academics exams">
+<h4>👆 One-hand navigation</h4><ol class="steps">
+<li>Every major student area is available directly from the bottom navigation.</li>
+<li>Swipe the bottom navigation left or right to see Today, Schedule, Assignments, Academics, Exams, Study, Progress, Parent, Help, and Settings.</li>
+<li>No core student feature requires landscape mode or a hidden menu.</li>
+<li>Landscape may also show the expanded left menu, but it contains the same destinations.</li>
+</ol></div>
+<div class="help-topic" data-keywords="academics class classes course semester normal shortened day alternate schedule edit teacher room">
+<h4>🎓 Academics & class schedule</h4><ol class="steps">
+<li>Open Academics from the bottom navigation.</li>
+<li>Use Add course, or Dashboard → Quick Add → Add Class / Course.</li>
+<li>Enter the class, teacher, room, semester/term, meeting days, and normal start/end time.</li>
+<li>If the school uses a shortened or alternate day, name it and enter its alternate start/end time.</li>
+<li>Tap Edit on any class when a semester, teacher, room, day, or time changes.</li>
+<li>Your saved class schedule automatically feeds the Unified Student Schedule.</li>
+</ol></div>
+<div class="help-topic" data-keywords="exams quiz quizzes tests add edit complete due date">
+<h4>🧠 Exams & quizzes</h4><ol class="steps">
+<li>Open Exams directly from the bottom navigation.</li>
+<li>Tap Add exam, or use Dashboard → Quick Add → Add Exam / Quiz.</li>
+<li>Select the class, choose today or a future date, and add optional notes.</li>
+<li>Use Edit if exam information changes.</li>
+<li>Exam records use the same completion workflow as assignments.</li>
+</ol></div><div class="help-topic" data-keywords="portrait one hand one-handed all features branding academics exams mobile navigation">
+<h4>📱 Portrait phone navigation</h4>
+<ol class="steps">
+<li>Portrait is designed for everyday one-handed phone use.</li>
+<li>The Student Command Center / ProgressMint Studios identity remains visible in the mobile header.</li>
+<li>Use the five bottom tabs for the most-used areas.</li>
+<li>Swipe the bottom navigation to reach Exams, Academics, Parent Updates, Help, Settings, and every other major feature.</li>
+<li>Landscape may provide an expanded left menu, but the same major features remain directly available from the bottom navigation.</li>
+</ol></div><div class="help-topic" data-keywords="iphone ios landscape horizontal left menu scroll navigation">
+<h4>📱 iPhone landscape navigation</h4>
+<ol class="steps">
+<li>When an iPhone is held horizontally, the full left navigation remains available.</li>
+<li>If the screen height is short, swipe up or down inside the left menu itself to reveal the remaining items.</li>
+<li>The main page can scroll separately from the navigation menu.</li>
+</ol></div><div class="help-topic" data-keywords="mobile portrait landscape menu academics exams settings navigation">
+<h4>📱 Mobile navigation & Academics</h4><ol class="steps">
+<li>In portrait phone view, use the five bottom tabs for the most common areas.</li>
+<li>Tap ☰ All Features at the top for the complete navigation list.</li>
+<li>The full mobile menu includes Exams, Academics, Parent Updates, Help, and Settings as well as the main sections.</li>
+<li>Landscape and wider screens provide the expanded left navigation, but all features remain accessible in portrait.</li>
+</ol></div><div class="help-topic" data-keywords="edit assignment change due date subject notes delete">
+<h4>✏️ Edit an assignment</h4>
+<ol class="steps">
+<li>Open Assignments.</li>
+<li>Tap Edit on the assignment you want to change.</li>
+<li>Update the type, title, subject, due date, or notes.</li>
+<li>Tap Save changes.</li>
+<li>Editing does not change completion XP unless you delete or change the assignment's completed state.</li>
+</ol>
+</div><div class="help-topic" data-keywords="trophy trophies level badge distinction trophy case reward">
+<h4>🏆 Level trophies</h4><ol class="steps">
+<li>Each level from 1–10 has its own trophy distinction.</li>
+<li>Your current trophy stays visible on the Dashboard beside your Level.</li>
+<li>When you reach a new level, its celebration plays first and the new trophy becomes your Dashboard distinction.</li>
+<li>Open Progress to see earned trophies in the Trophy Case and upcoming locked levels.</li>
+<li>Trophies represent planning, focus and completed effort; they do not change XP or grades.</li>
+</ol></div><div class="help-topic" data-keywords="rewards xp level milestone celebration animation study assignment project streak">
+<h4>🏆 Rewards, XP & celebrations</h4>
+<ol class="steps">
+<li>XP is earned for planning, completed work, and finished Study sessions — not for grades.</li>
+<li>Assignments, Study sessions, project milestones, and planning milestones can trigger a short celebration.</li>
+<li>Level-up celebrations are larger than regular milestones.</li>
+<li>Celebrations are visual only; saving, XP, timers, and navigation still work even if an animation does not play.</li>
+<li>Turn celebrations off in Settings if you prefer fewer visual effects. Reduce Motion is respected.</li>
+</ol></div><div class="help-topic" data-keywords="dashboard home open startup quick add return">
+<h4>🏠 Dashboard & Quick Add return</h4>
+<ol class="steps">
+<li>Student Command Center opens on the Dashboard each time the app is launched.</li>
+<li>Use Quick Add from the Dashboard to start a supported action.</li>
+<li>After saving an Assignment, Exam / Quiz, or Schedule Activity / Job started through Quick Add, the app returns to the Dashboard.</li>
+<li>Study and Parent Updates remain open while you are actively using them; use the app navigation when finished.</li>
+</ol></div><div class="help-topic" data-keywords="parent updates quick add quick actions parent email">
+<h4>⚡ Parent Updates — Quick Add</h4>
+<ol class="steps">
+<li>From Today, tap Quick Add.</li>
+<li>In Quick Actions, choose Open Parent Updates.</li>
+<li>The app opens Parent Updates directly.</li>
+<li>Review the update before using the email/share action.</li>
+</ol>
+</div><div class="help-topic" data-keywords="quick add quick actions dashboard shortcut"><h4>⚡ Quick Add & Quick Actions</h4><ol class="steps"><li>Quick Add is a Dashboard shortcut.</li><li>Tap it to open Quick Actions.</li><li>Choose the action you want: Assignment, Exam / Quiz, Schedule Activity / Job, Study Session, or Parent Updates.</li><li>Schedule opens directly into Add Activity. Study opens directly to Study, and Parent Updates opens directly to Parent Updates. Assignment and Exam / Quiz entry fields are available immediately in Quick Actions.</li></ol></div>
+<div class="help-topic" data-keywords="completed assignments seven 7 days xp progress incomplete"><h4>✅ Completed Assignments</h4><ol class="steps"><li>Tap the completion circle on an active assignment.</li><li>It moves to Completed Assignments and receives its completion credit.</li><li>Completed assignments remain visible for 7 days.</li><li>Tap Mark incomplete during that period to return one to Active.</li><li>After 7 days the individual record clears, but earned XP/progress remains credited.</li></ol></div>
+<div class="help-topic" data-keywords="study timer focus xp leave return resume pause"><h4>⏱️ Study timer & XP</h4><ol class="steps"><li>Open Study or choose Study Session from Quick Actions.</li><li>Select a preset or custom session length.</li><li>Start the timer. A running session continues when you leave and return to the app.</li><li>Pause only when you want the session to stop counting down.</li><li>Complete the session to receive the displayed XP credit.</li></ol></div>
+<div class="help-topic" data-keywords="parent updates parent email schedule progress"><h4>👪 Parent Updates — Navigation</h4><ol class="steps"><li>Open Parent Updates from the labeled Parent Updates navigation/control.</li><li>Review the student information, progress and schedule information shown there.</li><li>Use only the sharing/update controls presented by the app.</li><li>The app does not claim an update was sent unless the interface confirms that action.</li></ol></div><div class="help-topic" data-keywords="assignment complete done checkbox mark incomplete"><h4>✅ Complete an assignment</h4><p class="muted">Tap the circle beside an assignment to mark it complete. It moves from Active Assignments into Completed Assignments, where it remains counted toward progress and XP. Use Mark incomplete if needed.</p></div><div class="help-topic" data-keywords="assignment homework task due date"><h4>📝 Add an assignment</h4><ol class="steps"><li>From the Dashboard, tap Quick Add.</li><li>In Quick Actions, choose Add Assignment.</li><li>Enter the title, subject, due date and optional notes.</li><li>Tap Continue. The assignment appears in Active Assignments.</li></ol></div><div class="help-topic" data-keywords="exam quiz test"><h4>🧠 Add an exam or quiz</h4><ol class="steps"><li>From the Dashboard, tap Quick Add.</li><li>In Quick Actions, choose Add Exam / Quiz.</li><li>Enter a title, subject, date and optional notes.</li><li>Tap Continue.</li></ol></div><div class="help-topic" data-keywords="schedule sports band music theater club activity recurring job work shift"><h4>📅 Schedule activities & work shifts</h4><ol class="steps"><li>Open Schedule and tap Add activity, or use Dashboard → Quick Add → Add Schedule Activity / Job.</li><li>Enter the activity and choose its category, including Job / Work Shift when appropriate.</li><li>Choose the hour, minutes, and AM/PM once for each start/end time. Saved times display in 12-hour AM/PM format.</li><li>Choose recurrence if needed, then save the activity.</li><li>Tap an existing activity to edit or delete it.</li></ol></div><div class="help-topic" data-keywords="study focus timer pause resume xp custom duration minutes"><h4>⏱ Study Mode</h4><p class="muted">Choose 10, 15, 25, 30, 45, 60 minutes or a custom duration. 25 minutes is the recommended default. Start, Pause/Resume when needed, and complete the session to earn capped XP.</p></div><div class="help-topic" data-keywords="parent guardian email share progress schedule accomplishments"><h4>👨‍👩‍👧 Parent Updates</h4><ol class="steps"><li>Open Parent Updates from navigation.</li><li>Add contact information.</li><li>Review the full message.</li><li>Open the email update and review again before sending.</li></ol></div><div class="help-topic" data-keywords="backup restore export import privacy safe"><h4>💾 Backup & restore</h4><p class="muted">Export a backup in Settings and import it later if needed.</p></div><div class="help-topic" data-keywords="privacy mode parent email session location address"><h4>🔐 Privacy-first mode</h4><p class="muted">Parent email is session-only by default. Use general locations instead of precise addresses.</p></div></div></div><div class="card s5"><h3>First-time setup reference</h3><div class="setup-check"><label><input type="checkbox" class="setupItem"> <span>Add your name and grade</span></label><label><input type="checkbox" class="setupItem"> <span>Add your first assignment; later add its grade when returned</span></label><label><input type="checkbox" class="setupItem"> <span>Add an activity or work shift</span></label><label><input type="checkbox" class="setupItem"> <span>Try Study Mode</span></label></div></div><div class="card s7"><h3>Quick Start reference</h3><ol class="steps"><li>Enter your profile.</li><li>Add your next assignment.</li><li>Add classes and activities.</li><li>Check Today and Schedule.</li><li>Use Study Mode to focus.</li><li>After completed work is graded, open Assignments → Add grade. Choose percentage, points, or A/B/C/D/F. Entered grades can appear in Parent Updates.</li></ol></div></div></section>
+<section id="parent" class="view"><div class="grid"><div class="card s5"><h3>Parent / Guardian <button class="context-help" aria-label="Parent update help" onclick="toggleTip('parentTip')">?</button></h3><div id="parentTip" class="help-tip">Add a parent/guardian email, review the generated summary, then choose Open email update. Nothing is sent automatically.</div><div class="form"><input id="pname" placeholder="Name"><input id="pemail" autocomplete="off" inputmode="email" type="email" placeholder="Email"></div><p class="muted">The student can review the exact update before opening their email app. You review the update before it opens in your email app. Nothing is sent automatically.</p><button class="btn primary" onclick="saveParent()">Save contact</button></div><div class="card s7"><h3>Parent Update Preview</h3><p class="muted">Review the prepared message before opening your mail app.</p><textarea id="preview" style="min-height:230px"></textarea><br><br><button class="btn" onclick="summary()">Refresh</button> <button class="btn primary" onclick="emailUpdate()">Open email update</button></div></div></section>
+<section id="settings" class="view"><div class="grid"><div class="card s6"><h3>Student profile</h3><div class="form"><input id="sname" placeholder="First name"><select id="grade"><option value="">Grade level</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>College</option></select></div><br><button class="btn primary" onclick="saveProfile()">Save</button></div><div class="card s6"><h3>Personalize</h3><p class="muted">Choose an accent that feels like yours. ProgressMint branding stays subtle.</p>
+<div class="theme-swatches">
+<button class="swatch" aria-label="Mint theme" style="background:#57d6a6" onclick="setAccent('#57d6a6',this)"></button>
+<button class="swatch" aria-label="Blue theme" style="background:#78a9ff" onclick="setAccent('#78a9ff',this)"></button>
+<button class="swatch" aria-label="Purple theme" style="background:#a98cff" onclick="setAccent('#a98cff',this)"></button>
+<button class="swatch" aria-label="Orange theme" style="background:#ffad66" onclick="setAccent('#ffad66',this)"></button>
+</div><br><label class="reminder-row"><span><b>Gentle in-app reminders</b><br><span class="muted">Show helpful due-soon prompts on the dashboard.</span></span><input id="remindersOn" type="checkbox" onchange="savePrefs()"></label>
+<label><span class="muted">Remind me this many days ahead</span><select id="reminderDays" onchange="savePrefs()"><option value="1">1 day</option><option value="2">2 days</option><option value="3">3 days</option><option value="7">7 days</option></select></label>
+<label class="reminder-row"><span><b>Celebration effects</b><br><span class="muted">Small visual celebration when work is completed.</span></span><input id="celebrateOn" type="checkbox" onchange="savePrefs()"></label></div>
+<div class="card s6"><h3>Release Safety Gate</h3><div id="releaseGate" class="release-gate"></div><p class="security-note">Buyer-ready status stays blocked until hosted HTTPS and real-device/security/accessibility testing are completed.</p></div>
+<div class="card s6"><h3>App & Connection</h3><div id="pwaReadiness" class="readiness"></div><br><div id="connectionState" class="item"></div><div id="installCard" class="install-card"><p class="muted">On supported browsers, Student Command Center can be installed for app-like access.</p><button id="installBtn" class="btn primary">Install app</button></div><p id="iosInstall" class="muted hidden">On iPhone/iPad, use the browser Share menu and choose Add to Home Screen when available.</p></div>
+<div class="card s6"><h3>Privacy & Security</h3>
+<div class="privacy-panel">
+<label class="reminder-row"><span><b>Privacy-first mode</b><br><span class="muted">Recommended. Parent email is kept only for the current session and precise-looking activity locations are blocked.</span></span><input id="privacyMode" type="checkbox" onchange="savePrivacyMode()"></label><br><div class="privacy-list">
+<div>🔒 <span><b>Local-first data</b><br><span class="muted">Planner information stays in this browser profile in the current release.</span></span></div>
+<div>🚫 <span><b>No advertising trackers</b><br><span class="muted">This package contains no ad or behavioral-tracking scripts.</span></span></div>
+<div>📍 <span><b>Minimize sensitive details</b><br><span class="muted">Use general locations such as “school gym” rather than home addresses or precise personal locations.</span></span></div>
+<div>📨 <span><b>Student-controlled sharing</b><br><span class="muted">Parent updates are previewed before the email app opens. Nothing is secretly or automatically sent.</span></span></div>
+</div>
+<br><button class="btn" onclick="privacyAudit()">Run privacy check</button>
+<button class="btn" onclick="exportPrivacySafe()">Export privacy-safe backup</button>
+<div id="privacyAuditResult" class="security-note" aria-live="polite"></div>
+</div></div>
+<div class="card s6"><h3>Data Safety</h3><div id="storageStatus" class="item"></div><p class="muted">For important school information, export a backup regularly. Private/incognito sessions may not retain browser data after the session ends.</p></div>
+<div class="card s6"><h3>Delete Planner Data</h3><p class="muted">Use this when you no longer want this browser profile to keep Student Command Center data. Export a backup first if you may need it later.</p><button class="btn danger" onclick="clearPlannerData()">Delete my planner data</button></div>
+<div class="card s6"><h3>Backup</h3><p class="muted">MVP data is stored in this browser profile. Export backups for safety, especially on managed school Chromebooks.</p><button class="btn" onclick="backup()">Export JSON</button> <label class="btn">Import JSON<input id="importer" type="file" accept=".json,application/json" hidden></label></div></div></section>
+</main></div><div id="mobileMenuBackdrop" class="mobile-menu-backdrop hidden" onclick="closeMobileMenu()"></div>
+<aside id="mobileMenu" class="mobile-menu-drawer hidden" aria-label="Mobile full navigation">
+<div class="row"><strong>Student Command Center</strong><button class="btn" onclick="closeMobileMenu()" aria-label="Close navigation menu">✕</button></div>
+<p class="mobile-menu-note">All app features</p><nav class="mobile-full-nav">
+<button data-v="dash">🏠 Dashboard</button>
+<button data-v="assign">✅ Assignments</button>
+<button data-v="exams">🧠 Exams</button>
+<button data-v="academics">🎓 Academics</button>
+<button data-v="schedule">📅 Full Schedule</button>
+<button data-v="study">⏱ Study Mode</button>
+<button data-v="progress">🏆 Progress</button>
+<button data-v="parent">👨‍👩‍👧 Parent Updates</button>
+<button data-v="help">❓ Help</button>
+<button data-v="settings">⚙️ Settings</button>
+</nav></aside>
+<nav class="mobilebar safe-bottom" id="mobileNav" aria-label="Main app navigation">
+  <button class="on" data-v="dash"><span>🏠</span>Today</button>
+  <button data-v="schedule"><span>📅</span>Schedule</button>
+  <button data-v="assign"><span>✅</span>Assignments</button>
+  <button data-v="academics"><span>🎓</span>Academics</button>
+  <button data-v="exams"><span>🧠</span>Exams</button>
+  <button data-v="study"><span>⏱</span>Study</button>
+  <button data-v="progress"><span>🏆</span>Progress</button>
+  <button data-v="parent"><span>👨‍👩‍👧</span>Parent</button>
+  <button data-v="help"><span>❓</span>Help</button>
+  <button data-v="settings"><span>⚙️</span>Settings</button>
+</nav>
+
+
+
+<div id="courseModal" class="hidden" style="position:fixed;inset:0;background:#0009;display:grid;place-items:center;padding:20px;z-index:25">
+<div class="card" style="width:min(680px,100%);max-height:92vh;overflow:auto">
+<div class="row"><h3 id="courseModalTitle">Add Class / Course</h3><button class="btn" onclick="closeCourse()">✕</button></div>
+<div class="form">
+<input id="courseName" placeholder="Class / course — e.g. Biology">
+<input id="courseTeacher" placeholder="Teacher / professor">
+<input id="courseRoom" placeholder="Room / location">
+<input id="courseTerm" placeholder="Semester / term — e.g. Fall 2026">
+<input id="courseDays" placeholder="Class days — e.g. Mon/Wed/Fri">
+<input id="courseTarget" type="number" min="0" max="100" placeholder="Target grade % (optional)">
+
+<div class="time-field"><label class="muted">Normal day start</label><div class="time-select-row">
+<select id="courseStartHour" aria-label="Normal day start hour"></select><span class="time-colon">:</span>
+<select id="courseStartMinute" aria-label="Normal day start minute"></select>
+<select id="courseStartPeriod" aria-label="Normal day start AM or PM"><option>AM</option><option>PM</option></select>
+</div></div>
+
+<div class="time-field"><label class="muted">Normal day end</label><div class="time-select-row">
+<select id="courseEndHour" aria-label="Normal day end hour"></select><span class="time-colon">:</span>
+<select id="courseEndMinute" aria-label="Normal day end minute"></select>
+<select id="courseEndPeriod" aria-label="Normal day end AM or PM"><option>AM</option><option>PM</option></select>
+</div></div>
+
+<input id="courseAltLabel" placeholder="Alternate schedule name — e.g. Shortened Day (optional)">
+
+<div class="time-field"><label class="muted">Alternate start</label><div class="time-select-row">
+<select id="courseAltStartHour" aria-label="Alternate start hour"></select><span class="time-colon">:</span>
+<select id="courseAltStartMinute" aria-label="Alternate start minute"></select>
+<select id="courseAltStartPeriod" aria-label="Alternate start AM or PM"><option>AM</option><option>PM</option></select>
+</div></div>
+
+<div class="time-field"><label class="muted">Alternate end</label><div class="time-select-row">
+<select id="courseAltEndHour" aria-label="Alternate end hour"></select><span class="time-colon">:</span>
+<select id="courseAltEndMinute" aria-label="Alternate end minute"></select>
+<select id="courseAltEndPeriod" aria-label="Alternate end AM or PM"><option>AM</option><option>PM</option></select>
+</div></div>
+</div>
+<br>
+<div class="row">
+<button id="saveCourseBtn" class="btn primary" onclick="saveCourse()">Save class</button>
+<button id="deleteCourseBtn" class="btn danger hidden" onclick="deleteEditingCourse()">Delete class</button>
+</div>
+</div></div>
+
+<div id="projectModal" class="hidden" style="position:fixed;inset:0;background:#0009;display:grid;place-items:center;padding:20px;z-index:25"><div class="card" style="width:min(620px,100%)"><div class="row"><h3>Add Project</h3><button class="btn" onclick="closeModal('projectModal')">✕</button></div><div class="form"><input id="projectName" placeholder="Project name"><select id="projectCourse"></select><input id="projectDue" type="date"><input id="projectSteps" placeholder="Milestones separated by commas"><textarea id="projectNotes" placeholder="Notes"></textarea></div><br><button class="btn primary" onclick="saveProject()">Save project</button></div></div>
+
+<div id="gradeModal" class="hidden" style="position:fixed;inset:0;background:#0009;display:grid;place-items:center;padding:20px;z-index:25"><div class="card" style="width:min(620px,100%)"><div class="row"><h3>Add Grade</h3><button class="btn" onclick="closeModal('gradeModal')">✕</button></div><div class="form"><select id="gradeCourse"></select><input id="gradeItem" placeholder="Assessment — e.g. Quiz 2"><input id="gradeEarned" type="number" min="0" step=".01" placeholder="Points earned"><input id="gradePossible" type="number" min=".01" step=".01" placeholder="Points possible"></div><br><button class="btn primary" onclick="saveGrade()">Save grade</button></div></div>
+
+<div id="goalModal" class="hidden" style="position:fixed;inset:0;background:#0009;display:grid;place-items:center;padding:20px;z-index:25"><div class="card" style="width:min(620px,100%)"><div class="row"><h3>Add Semester Goal</h3><button class="btn" onclick="closeModal('goalModal')">✕</button></div><div class="form"><input id="goalTitle" placeholder="Goal — e.g. Stay caught up in Biology"><input id="goalAction" placeholder="Action I control — e.g. Review notes Tue/Thu"><input id="goalDate" type="date"><select id="goalStatus"><option>Active</option><option>Completed</option></select></div><br><button class="btn primary" onclick="saveGoal()">Save goal</button></div></div>
+
+<div id="noteModal" class="hidden" style="position:fixed;inset:0;background:#0009;display:grid;place-items:center;padding:20px;z-index:25"><div class="card" style="width:min(620px,100%)"><div class="row"><h3>Add Note</h3><button class="btn" onclick="closeModal('noteModal')">✕</button></div><div class="form"><input id="noteTitle" placeholder="Note title"><select id="noteCourse"></select><textarea id="noteBody" placeholder="Important links, reminders, study notes, questions..."></textarea></div><br><button class="btn primary" onclick="saveNote()">Save note</button></div></div>
+
+
+<div id="assignmentEditModal" class="hidden" style="position:fixed;inset:0;background:#0009;display:grid;place-items:center;padding:20px;z-index:25">
+  <div class="card" style="width:min(620px,100%);max-height:92vh;overflow:auto">
+    <div class="row">
+      <h3>Edit Assignment</h3>
+      <button class="btn" onclick="closeAssignmentEdit()">✕</button>
+    </div>
+    <div class="form">
+      <select id="editAssignType">
+        <option value="assignment">Assignment</option>
+        <option value="exam">Exam / Quiz</option>
+      </select>
+      <select id="editExamCourse" class="hidden" aria-label="Exam class"></select><input id="editAssignTitle" placeholder="Title">
+      <input id="editAssignSubject" placeholder="Subject">
+      <input id="editAssignDate" type="date">
+      <textarea id="editAssignNotes" placeholder="Notes / next step"></textarea>
+    </div>
+    <br>
+    <div class="row">
+      <button class="btn primary" onclick="saveAssignmentEdit()">Save changes</button>
+      <button class="btn danger" onclick="deleteEditingAssignment()">Delete assignment</button>
+    </div>
+  </div>
+</div>
+
+<div id="activityModal" class="hidden" style="position:fixed;inset:0;background:#0009;display:grid;place-items:center;padding:20px;z-index:20">
+<div class="card" style="width:min(640px,100%);max-height:92vh;overflow:auto">
+<div class="row"><h3 id="activityModalTitle">Add Schedule Activity</h3><button class="btn" onclick="closeActivity()">✕</button></div>
+<div class="form">
+<input id="actTitle" placeholder="Activity — e.g. Soccer Practice">
+<select id="actCategory"><option>Sports</option><option>Band/Music</option><option>Theater/Arts</option><option>Club</option><option>Tutoring</option><option>Job / Work Shift</option><option>Volunteer</option><option>Academic</option><option>Personal</option><option>Other</option></select>
+<input id="actDate" type="date"><input id="actLocation" placeholder="General location only — e.g. School Gym (optional)" autocomplete="off">
+<div class="time-field">
+<label class="muted">Start time</label>
+<div class="time-select-row">
+<select id="actStartHour" aria-label="Start hour"></select>
+<span class="time-colon">:</span>
+<select id="actStartMinute" aria-label="Start minute"></select>
+<select id="actStartPeriod" aria-label="Start AM or PM"><option>AM</option><option>PM</option></select>
+</div>
+</div>
+<div class="time-field">
+<label class="muted">End time</label>
+<div class="time-select-row">
+<select id="actEndHour" aria-label="End hour"></select>
+<span class="time-colon">:</span>
+<select id="actEndMinute" aria-label="End minute"></select>
+<select id="actEndPeriod" aria-label="End AM or PM"><option>AM</option><option>PM</option></select>
+</div>
+</div></div>
+<select id="actRepeat" onchange="toggleCustomDays()"><option value="none">Does not repeat</option><option value="weekly">Weekly on this day</option><option value="weekdays">Every weekday</option><option value="custom">Custom weekdays</option></select>
+<input id="actNotes" placeholder="Coach/director, pickup notes, equipment, etc.">
+<div id="customDays" class="days hidden">
+<label><input type="checkbox" value="1"> Mon</label><label><input type="checkbox" value="2"> Tue</label><label><input type="checkbox" value="3"> Wed</label><label><input type="checkbox" value="4"> Thu</label><label><input type="checkbox" value="5"> Fri</label><label><input type="checkbox" value="6"> Sat</label><label><input type="checkbox" value="0"> Sun</label>
+</div>
+</div><br><div class="row activity-actions"><button id="saveActivityBtn" class="btn primary" onclick="saveActivity()">Save activity</button><button id="deleteActivityBtn" class="btn danger hidden" onclick="deleteEditingActivity()">Delete activity</button></div>
+</div></div>
+
+<div id="modal" class="hidden" style="position:fixed;inset:0;background:#0009;display:grid;place-items:center;padding:20px"><div class="card" style="width:min(560px,100%)"><div class="row"><h3>Quick Actions</h3><button class="btn" onclick="closeAdd()">✕</button></div><div class="form"><label class="muted" for="type">Choose an action — schedule, study and parent options open directly.</label><select id="type" aria-label="Choose quick action">
+<option value="assignment">Add Assignment</option>
+<option value="exam">Add Exam / Quiz</option>
+<option value="course">Add Class / Course</option>
+<option value="schedule">Add Schedule Activity / Job</option>
+<option value="study">Start / Set Study Session</option>
+<option value="parent">Open Parent Updates</option>
+</select><select id="examCourse" class="hidden" aria-label="Exam class"></select><input id="ititle" placeholder="Title"><input id="subject" placeholder="Subject"><input id="date" type="date"><textarea id="notes" placeholder="Notes / next step"></textarea></div><br><button class="btn primary" onclick="addItem()">Continue</button></div></div>
+<div id="onboarding" class="onboard hidden" role="dialog" aria-modal="true" aria-labelledby="onboardTitle">
+<div class="card onboard-card">
+<div class="row"><div><span class="pill">QUICK START</span><h2 id="onboardTitle">Welcome to Student Command Center</h2></div><button class="btn" onclick="finishOnboarding()">Skip</button></div>
+<div class="dots"><span class="dot on"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+<div class="onboard-step active"><h3>1. One place for the whole week</h3><p class="muted">Keep assignments, exams, projects, classes and extracurricular activities together so you can see what is coming next.</p></div>
+<div class="onboard-step"><h3>2. Make it yours</h3><p class="muted">Choose an accent, add courses and activities, and use the phone, tablet or computer layout that fits your day.</p></div>
+<div class="onboard-step"><h3>3. Focus without pressure</h3><p class="muted">Study Mode, Weekly Wins and XP celebrate useful actions. Grades do not determine XP, and reminders or celebrations can be turned off.</p></div>
+<div class="onboard-step"><h3>4. Protect your work</h3><p class="muted">Enter only what you need, avoid precise personal locations, and export backups regularly. This version stores planner data in the current browser profile and does not automatically sync it between devices.</p></div>
+<div class="row"><button id="onboardBack" class="btn" onclick="onboardMove(-1)" disabled>Back</button><button id="onboardNext" class="btn primary" onclick="onboardMove(1)">Next</button></div>
+</div></div>
+
+<button id="floatingHelp" class="floating-help" onclick="openGlobalHelp()" aria-label="Open Help">❓ Help</button>
+
+<div id="celebrationOverlay" class="celebration-overlay hidden" aria-live="polite" aria-atomic="true">
+  <div id="celebrationCard" class="celebration-card">
+    <div id="celebrationIcon" class="celebration-icon">✨</div>
+    <div id="celebrationTitle" class="celebration-title">Milestone!</div>
+    <div id="celebrationText" class="celebration-text"></div>
+  </div>
+</div>
+<div id="undoBar" class="undo-bar" role="status"><span id="undoText">Item removed.</span><button class="btn" onclick="undoDelete()">Undo</button></div><div id="assignmentGradeModal" class="modal hidden"><div class="modalbox"><div class="row"><h3>Add Assignment Grade</h3><button class="btn" onclick="closeModal('assignmentGradeModal')">Close</button></div><p id="assignmentGradeName" class="muted"></p><div class="grade-form"><select id="assignmentGradeMode" onchange="syncAssignmentGradeMode()"><option value="percent">Percentage</option><option value="points">Points earned / possible</option><option value="letter">Letter grade</option></select><input id="assignmentGradePercent" type="number" min="0" max="200" step="0.1" placeholder="Percentage, e.g. 92"><input id="assignmentGradeEarned" class="hidden" type="number" min="0" step="0.1" placeholder="Points earned"><input id="assignmentGradePossible" class="hidden" type="number" min="0.1" step="0.1" placeholder="Points possible"><select id="assignmentGradeLetter" class="hidden"><option>A</option><option>B</option><option>C</option><option>D</option><option>F</option></select><textarea id="assignmentGradeNote" class="wide" placeholder="Optional note"></textarea></div><br><button class="btn primary" onclick="saveAssignmentGrade()">Save grade</button></div></div><div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+const K='pm_scc_mvp1';let storageOK=false;
+function storageAvailable(){try{let x='__pm_test__';localStorage.setItem(x,x);localStorage.removeItem(x);return true}catch(e){return false}}
+storageOK=storageAvailable();
+function loadStored(){if(!storageOK)return null;try{return JSON.parse(localStorage.getItem(K)||'null')}catch(e){return null}}
+function off(n){let d=new Date;d.setDate(d.getDate()+n);return d.toISOString().slice(0,10)}
+const demo={profile:{name:'Alex',grade:'10'},parent:{name:'',email:''},xp:120,streak:3,assignments:[{id:'a1',title:'Chemistry Lab Report',subject:'Science',date:off(1),done:false,notes:'Finish conclusion + citations'},{id:'a2',title:'English Essay Draft',subject:'English',date:off(3),done:false,notes:'Revise intro and thesis'},{id:'a3',title:'Math Problem Set',subject:'Math',date:off(5),done:false,notes:'Questions 1–30'}],exams:[{id:'e1',title:'World History Quiz',subject:'History',date:off(4),done:false,notes:'Chapters 8–9'}],
+courses:[{id:'c1',name:'Biology',teacher:'Ms. Rivera',room:'204',target:85,days:'Mon/Wed/Fri',time:'09:00'},{id:'c2',name:'English',teacher:'Mr. Lee',room:'118',target:88,days:'Tue/Thu',time:'10:30'}],
+projects:[{id:'pr1',name:'Biology Ecosystem Project',courseId:'c1',due:off(12),steps:[{text:'Choose topic',done:true},{text:'Research sources',done:false},{text:'Build presentation',done:false}],notes:'Use at least 3 sources'}],
+grades:[{id:'g1',courseId:'c1',item:'Quiz 1',earned:18,possible:20},{id:'g2',courseId:'c1',item:'Lab 1',earned:42,possible:50},{id:'g3',courseId:'c2',item:'Essay 1',earned:45,possible:50}],
+prefs:{accent:'#57d6a6',reminders:true,celebrate:true},semesterGoals:[{id:'sg1',title:'Stay caught up in Biology',action:'Review notes Tuesday and Thursday',date:off(45),status:'Active'}],
+notes:[{id:'n1',title:'Biology study reminders',courseId:'c1',body:'Review vocabulary before the next lab.'}],
+activities:[
+{id:'x1',title:'Soccer Practice',category:'Sports',date:off(1),start:'16:00',end:'18:00',location:'School Field',repeat:'custom',days:[2,4],notes:'Bring cleats + water'},
+{id:'x2',title:'Band Rehearsal',category:'Band/Music',date:off(2),start:'15:30',end:'17:00',location:'Music Room',repeat:'weekly',days:[],notes:'Concert music'}
+]};
+let d=loadStored()||structuredClone(demo);if(!Array.isArray(d.activities))d.activities=[];
+if(!Array.isArray(d.courses))d.courses=[];
+if(!Array.isArray(d.projects))d.projects=[];
+if(!Array.isArray(d.grades))d.grades=[];
+if(!Array.isArray(d.semesterGoals))d.semesterGoals=[];
+if(!Array.isArray(d.notes))d.notes=[];if(!d.schoolDays||typeof d.schoolDays!=='object')d.schoolDays={};if(!d.prefs)d.prefs={accent:'#57d6a6',reminders:true,celebrate:true};if(!d.prefs.reminderDays)d.prefs.reminderDays=2;if(d.prefs.privacyMode===undefined)d.prefs.privacyMode=true;const $=id=>document.getElementById(id);
+function todayISO(){return new Date().toISOString().slice(0,10)}
+function enforceFutureDates(){
+ let min=todayISO();
+ document.querySelectorAll('input[type="date"]').forEach(el=>{
+   el.min=min;
+   el.addEventListener('change',()=>{
+     if(el.value&&el.value<min){el.value=min;pop('Dates must be today or later.')}
+   })
+ })
+}
+function save(){
+ if(storageOK){try{localStorage.setItem(K,JSON.stringify(d))}catch(e){storageOK=false}}
+ render();renderStorageStatus();renderReleaseGate()
+}
+function days(x){let a=new Date(x+'T12:00:00'),b=new Date;b.setHours(12,0,0,0);return Math.ceil((a-b)/86400000)}function due(x){let n=days(x);return n<0?`${-n} day(s) overdue`:n==0?'Due today':n==1?'Due tomorrow':`Due in ${n} days`}
+function item(x){
+ let completed=x.done&&x.completedAt?new Date(x.completedAt).toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'}):'';
+ let grade=assignmentGradeText(x),canGrade=assignmentCanGrade(x);
+ return `<div class="item ${x.done?'completed-item':''}"><div class=row><div><strong>${x.done?'✅ ':''}${x.title}</strong><span class=muted>${x.subject}</span><div class=due>Due · ${new Date(x.date+'T12:00:00').toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'})}</div>${x.done&&completed?`<span class=muted>Completed ${completed}</span>`:''}${grade?`<span class="grade-chip">Grade: ${grade}</span>`:''}<span class=muted>${x.notes||''}</span></div><div class=completion-control><button class="btn" onclick="editAssignment('${x.id}')">Edit</button>${canGrade?`<button class="btn" onclick="openAssignmentGrade('${x.id}')">${grade?'Edit grade':'Add grade'}</button>`:''}<button class="check-btn ${x.done?'checked':''}" aria-pressed="${x.done?'true':'false'}" onclick="done('${x.id}')" aria-label="${x.done?'Mark assignment incomplete':'Mark assignment complete'}">${x.done?'✓':'○'}</button><span class=muted>${x.done?'Mark incomplete':'Mark done'}</span></div></div></div>`
+}
+
+let undoState=null,undoTimer=null;
+function renderStorageStatus(){
+ let s=$('storageStatus'),a=$('storageAlert');if(!s||!a)return;
+ if(storageOK){s.innerHTML='<strong>✓ Browser storage available</strong><div class=muted>Your data can persist in this browser profile. Export backups for extra safety.</div>';a.classList.remove('show')}
+ else{s.innerHTML='<strong>⚠ Browser storage unavailable</strong><div class=muted>Changes may disappear when this page closes. Export a backup before leaving.</div>';a.innerHTML='<strong>Data-saving warning:</strong> browser storage is unavailable in this session. Use Export JSON to protect your work.';a.classList.add('show')}
+}
+function queueUndo(label,fn){undoState=fn;$('undoText').textContent=label;$('undoBar').classList.add('show');clearTimeout(undoTimer);undoTimer=setTimeout(()=>{$('undoBar').classList.remove('show');undoState=null},7000)}
+function undoDelete(){if(undoState){undoState();undoState=null;$('undoBar').classList.remove('show');save();pop('Restored.')}}
+
+
+
+function fillTimeSelectors(){
+ const hours=[1,2,3,4,5,6,7,8,9,10,11,12],mins=['00','05','10','15','20','25','30','35','40','45','50','55'];
+ ['actStartHour','actEndHour'].forEach(id=>{let e=$(id);if(e&&!e.options.length)e.innerHTML=hours.map(x=>`<option value="${x}">${x}</option>`).join('')});
+ ['actStartMinute','actEndMinute'].forEach(id=>{let e=$(id);if(e&&!e.options.length)e.innerHTML=mins.map(x=>`<option value="${x}">${x}</option>`).join('')});
+}
+function setTimeSelector(prefix,time24){
+ fillTimeSelectors();
+ let h=16,m=0;
+ if(time24&&/^\d{2}:\d{2}$/.test(time24)){[h,m]=time24.split(':').map(Number)}
+ let period=h>=12?'PM':'AM',hr=h%12||12;
+ $(prefix+'Hour').value=String(hr);
+ $(prefix+'Minute').value=String(Math.round(m/5)*5).padStart(2,'0');
+ $(prefix+'Period').value=period;
+}
+function getTimeSelector(prefix){
+ let hr=Number($(prefix+'Hour').value),min=Number($(prefix+'Minute').value),period=$(prefix+'Period').value;
+ if(!hr||hr<1||hr>12||!Number.isFinite(min))return '';
+ let h=hr%12;if(period==='PM')h+=12;
+ return `${String(h).padStart(2,'0')}:${String(min).padStart(2,'0')}`;
+}
+
+function formatTime12(t){if(!t)return '';let [h,m]=t.split(':').map(Number),ap=h>=12?'PM':'AM',hh=h%12||12;return `${hh}:${String(m||0).padStart(2,'0')} ${ap}`}
+
+function setAmPm(which,period){if(which==='start')startPeriod=period;else endPeriod=period;['AM','PM'].forEach(p=>{let el=$((which==='start'?'start':'end')+p);if(el)el.setAttribute('aria-pressed',String(p===period))})}
+function parse12Clock(text,period){let m=(text||'').trim().match(/^(\\d{1,2})(?::(\\d{2}))?$/);if(!m)return null;let h=Number(m[1]),min=Number(m[2]||0);if(h<1||h>12||min<0||min>59)return null;if(period==='AM'&&h===12)h=0;if(period==='PM'&&h!==12)h+=12;return `${String(h).padStart(2,'0')}:${String(min).padStart(2,'0')}`}
+
+let internalBackHandling=false;
+function pushAppHistory(v){
+  if(internalBackHandling)return;
+  try{
+    let current=history.state&&history.state.sccView;
+    if(current!==v)history.pushState({sccView:v},'',location.href)
+  }catch(e){}
+}
+window.addEventListener('popstate',e=>{
+  let v=e.state&&e.state.sccView;
+  if(v&&document.getElementById(v)){
+    internalBackHandling=true;
+    show(v);
+    internalBackHandling=false
+  }
+});
+
+let currentView='dash',helpReturnView='dash';
+function persistView(v){currentView=v;if(storageOK)try{localStorage.setItem('pm_scc_last_view',v)}catch(e){}}
+
+function syncGlobalHelp(){
+  let h=$('floatingHelp');
+  if(!h)return;
+  h.classList.toggle('hidden',currentView==='help');
+}
+
+
+function openMobileMenu(){
+ let menu=$('mobileMenu'),back=$('mobileMenuBackdrop'),btn=$('mobileMenuBtn');
+ if(!menu||!back)return;
+ menu.classList.remove('hidden');back.classList.remove('hidden');
+ if(btn)btn.setAttribute('aria-expanded','true')
+}
+function closeMobileMenu(){
+ let menu=$('mobileMenu'),back=$('mobileMenuBackdrop'),btn=$('mobileMenuBtn');
+ if(menu)menu.classList.add('hidden');if(back)back.classList.add('hidden');
+ if(btn)btn.setAttribute('aria-expanded','false')
+}
+$('mobileMenu').addEventListener('click',e=>{
+ let b=e.target.closest('button[data-v]');if(!b)return;
+ closeMobileMenu();show(b.dataset.v)
+});
+
+function openGlobalHelp(){helpReturnView=currentView||'dash';show('help')}
+function returnFromHelp(){show(helpReturnView||'dash')}
+function restoreLastView(){if(!storageOK)return;try{let v=localStorage.getItem('pm_scc_last_view');if(v&&document.getElementById(v))show(v)}catch(e){}}
+
+const RETENTION_DAYS=7;
+function pruneOldHistory(){
+ const cutoff=Date.now()-RETENTION_DAYS*86400000;let changed=false;
+ d.assignments=d.assignments.filter(x=>{if(!x.done||!x.completedAt)return true;let keep=new Date(x.completedAt).getTime()>=cutoff;if(!keep)changed=true;return keep});
+ d.activities=d.activities.filter(x=>{if(!x.date)return true;let keep=new Date(x.date+'T23:59:59').getTime()>=cutoff;if(!keep)changed=true;return keep});
+ if(changed&&storageOK)try{localStorage.setItem('pm_scc',JSON.stringify(d))}catch(e){}
+}
+
+
+function renderDashboardUpcoming(){
+ if(!$('dashboardUpcomingSchedule'))return;
+ let upcoming=getOccurrences(0,14)
+   .filter(x=>x.kind!=='assignment'||!x.done)
+   .filter(x=>x.kind!=='exam'||!x.done)
+   .slice(0,20);
+ $('dashboardUpcomingSchedule').innerHTML=groupedScheduleHTML(upcoming,'Nothing upcoming.')
+}
+
+function render(){
+let ua=d.assignments.filter(x=>!x.done&&days(x.date)>=0&&days(x.date)<=7),ue=d.exams.filter(x=>!x.done&&days(x.date)>=0&&days(x.date)<=14);
+$('dueN').textContent=ua.length;$('examN').textContent=ue.length;$('xp').textContent=$('xp2').textContent=d.xp;$('streak').textContent=d.streak;
+let lvl=Math.floor(d.xp/200)+1;$('level').textContent=lvl;$('nextLevel').textContent=(lvl*200)-d.xp;
+document.documentElement.style.setProperty('--mint',d.prefs.accent||'#57d6a6');
+$('remindersOn').checked=d.prefs.reminders!==false;$('celebrateOn').checked=d.prefs.celebrate!==false;$('reminderDays').value=String(d.prefs.reminderDays||2);if($('privacyMode'))$('privacyMode').checked=d.prefs.privacyMode!==false;
+$('hello').textContent=(d.profile.name?`Hi ${d.profile.name} — `:'')+'let’s make school feel manageable.';
+let all=[...d.assignments,...d.exams].filter(x=>!x.done).sort((a,b)=>a.date.localeCompare(b.date));
+$('attention').innerHTML=all.slice(0,4).map(item).join('')||'<span class=muted>Nothing urgent.</span>';
+$('week').innerHTML=ua.map(item).join('')||'<span class=muted>Nothing due this week.</span>';
+let activeAssignments=d.assignments.filter(x=>!x.done),completedAssignments=d.assignments.filter(x=>x.done).sort((a,b)=>(b.completedAt||'').localeCompare(a.completedAt||''));
+$('alist').innerHTML=activeAssignments.map(item).join('')||'<span class=muted>No active assignments. Nice work!</span>';
+$('completedAssignmentList').innerHTML=completedAssignments.map(item).join('')||'<span class=muted>No completed assignments yet.</span>';
+$('completedAssignmentCount').textContent=`(${completedAssignments.length})`;$('elist').innerHTML=d.exams.map(item).join('');
+let n=d.assignments.filter(x=>x.done).length,p=Math.round(n/Math.max(1,d.assignments.length)*100);$('pct').textContent=p+'%';$('bar').style.width=p+'%';
+$('sname').value=d.profile.name||'';$('grade').value=d.profile.grade||'';$('pname').value=d.parent.name||'';$('pemail').value=sessionParentEmail||d.parent.email||'';
+renderSchedules();renderAcademics();renderWins();summary()
+renderLevelTrophies();renderDashboardUpcoming();}
+
+function renderWins(){
+ let completed=d.assignments.filter(x=>x.done).length, milestones=d.projects.reduce((n,p)=>n+p.steps.filter(s=>s.done).length,0);
+ let wins=[];
+ if(completed)wins.push(`✅ ${completed} assignment${completed===1?'':'s'} finished`);
+ if(milestones)wins.push(`📁 ${milestones} project milestone${milestones===1?'':'s'} completed`);
+ if(d.streak>=2)wins.push(`🔥 ${d.streak}-day study streak`);
+ if(!wins.length)wins.push('🌱 Your next completed task starts this week’s wins.');
+ $('weeklyWins').innerHTML=wins.slice(0,4).map(w=>`<div class=item>${w}</div>`).join('');
+ let lead=Number(d.prefs.reminderDays)||2;
+ let urgent=[...d.assignments,...d.exams].filter(x=>!x.done&&days(x.date)>=0&&days(x.date)<=lead);
+ let nextAct=getOccurrences(0,lead+1).filter(x=>x.kind==='activity');
+ if(d.prefs.reminders!==false){
+   $('smartCheck').innerHTML=urgent.length||nextAct.length
+    ? `<strong>🔔 Looking ahead ${lead} day${lead===1?'':'s'}</strong><div class=muted>${urgent.length} school deadline${urgent.length===1?'':'s'} • ${nextAct.length} scheduled activit${nextAct.length===1?'y':'ies'}</div>`
+    : `<strong>✓ Clear ahead</strong><div class=muted>No entered deadlines or activities in the next ${lead} day${lead===1?'':'s'}.</div>`;
+   if(urgent.length)$('attention').insertAdjacentHTML('afterbegin',`<div class=item><strong>🔔 Gentle reminder</strong><span class=muted>${urgent.length} item${urgent.length===1?' is':'s are'} due within ${lead} day${lead===1?'':'s'}.</span></div>`);
+ } else $('smartCheck').innerHTML='<span class=muted>Gentle reminders are turned off in Settings.</span>';
+}
+function setAccent(color,el){d.prefs.accent=color;document.documentElement.style.setProperty('--mint',color);document.querySelectorAll('.swatch').forEach(x=>x.classList.remove('active'));el.classList.add('active');save()}
+function savePrefs(){d.prefs.reminders=$('remindersOn').checked;d.prefs.celebrate=$('celebrateOn').checked;d.prefs.reminderDays=Number($('reminderDays').value)||2;save()}
+function celebrate(msg){
+ if(d.prefs.celebrate===false||window.matchMedia('(prefers-reduced-motion: reduce)').matches)return pop(msg);
+ let box=document.createElement('div');box.className='toast celebrate';box.style.display='block';box.textContent='✨ '+msg;document.body.appendChild(box);setTimeout(()=>box.remove(),1800)
+}
+
+
+
+let gradingAssignmentId=null;
+function assignmentCanGrade(x){return !!x&&(x.done||x.date<=todayISO())}
+function assignmentGradeText(x){
+ if(!x||!x.grade)return '';
+ let g=x.grade;
+ if(g.mode==='letter')return g.letter;
+ if(g.mode==='points')return `${g.earned}/${g.possible} (${g.percent}%)`;
+ return `${g.percent}%`
+}
+function openAssignmentGrade(id){
+ let x=d.assignments.find(a=>a.id===id);if(!x)return;
+ if(!assignmentCanGrade(x))return pop('Grades can be entered after an assignment is completed or its due date arrives.');
+ gradingAssignmentId=id;$('assignmentGradeName').textContent=`${x.subject||'Class'} · ${x.title}`;
+ let g=x.grade||{};$('assignmentGradeMode').value=g.mode||'percent';
+ $('assignmentGradePercent').value=g.percent??'';$('assignmentGradeEarned').value=g.earned??'';$('assignmentGradePossible').value=g.possible??'';
+ $('assignmentGradeLetter').value=g.letter||'A';$('assignmentGradeNote').value=g.note||'';
+ syncAssignmentGradeMode();$('assignmentGradeModal').classList.remove('hidden')
+}
+function syncAssignmentGradeMode(){
+ let m=$('assignmentGradeMode').value;
+ $('assignmentGradePercent').classList.toggle('hidden',m!=='percent');
+ $('assignmentGradeEarned').classList.toggle('hidden',m!=='points');
+ $('assignmentGradePossible').classList.toggle('hidden',m!=='points');
+ $('assignmentGradeLetter').classList.toggle('hidden',m!=='letter')
+}
+function saveAssignmentGrade(){
+ let x=d.assignments.find(a=>a.id===gradingAssignmentId);if(!x)return;
+ let mode=$('assignmentGradeMode').value,note=$('assignmentGradeNote').value.trim(),g={mode,note,enteredAt:new Date().toISOString()};
+ if(mode==='letter'){g.letter=$('assignmentGradeLetter').value}
+ else if(mode==='percent'){let v=Number($('assignmentGradePercent').value);if(!Number.isFinite(v)||v<0)return pop('Enter a valid percentage.');g.percent=Math.round(v*10)/10}
+ else {let e=Number($('assignmentGradeEarned').value),p=Number($('assignmentGradePossible').value);if(!Number.isFinite(e)||!Number.isFinite(p)||e<0||p<=0)return pop('Enter valid points earned and possible.');g.earned=e;g.possible=p;g.percent=Math.round(e/p*1000)/10}
+ x.grade=g;
+ // Add/update numerical assignment result in course grade tracker when the class can be matched.
+ let course=d.courses.find(c=>c.id===x.courseId)||d.courses.find(c=>(c.name||'').toLowerCase()===(x.subject||'').toLowerCase());
+ if(course&&mode!=='letter'){
+   let existing=d.grades.find(r=>r.assignmentId===x.id);
+   let earned=mode==='points'?g.earned:g.percent,possible=mode==='points'?g.possible:100;
+   if(existing)Object.assign(existing,{courseId:course.id,item:x.title,earned,possible,assignmentId:x.id});
+   else d.grades.push({id:'g'+Date.now().toString(36),courseId:course.id,item:x.title,earned,possible,assignmentId:x.id})
+ }
+ save();closeModal('assignmentGradeModal');pop('Assignment grade saved. No XP is awarded for grades.')
+}
+
+let editingAssignmentId=null,editingAssignmentCollection='assignments';
+function editAssignment(id){
+ let x=d.assignments.find(a=>a.id===id),collection='assignments';
+ if(!x){x=d.exams.find(a=>a.id===id);collection='exams'}
+ if(!x)return;
+ editingAssignmentId=id;editingAssignmentCollection=collection;
+ let exam=collection==='exams';
+ $('editAssignType').value=exam?'exam':(x.type||'assignment');
+ $('editExamCourse').classList.toggle('hidden',!exam);
+ $('editAssignTitle').classList.toggle('hidden',exam);
+ $('editAssignSubject').classList.toggle('hidden',exam);
+ if(exam){
+   $('editExamCourse').innerHTML=d.courses.map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
+   $('editExamCourse').value=x.courseId||'';
+ }else{
+   $('editAssignTitle').value=x.title||'';
+   $('editAssignSubject').value=x.subject||'';
+ }
+ $('editAssignDate').value=x.date||'';
+ $('editAssignNotes').value=x.notes||'';
+ $('assignmentEditModal').classList.remove('hidden')
+}
+function closeAssignmentEdit(){
+  $('assignmentEditModal').classList.add('hidden');
+  editingAssignmentId=null;
+}
+function saveAssignmentEdit(){
+ let list=editingAssignmentCollection==='exams'?d.exams:d.assignments;
+ let x=list.find(a=>a.id===editingAssignmentId);if(!x)return;
+ let date=$('editAssignDate').value;if(!date)return pop('Choose a date.');
+ if(editingAssignmentCollection==='exams'){
+   let courseId=$('editExamCourse').value,course=d.courses.find(c=>c.id===courseId);
+   if(!course)return pop('Choose a class.');
+   x.courseId=courseId;x.title=course.name;x.subject=course.name;x.date=date;x.notes=$('editAssignNotes').value.trim()
+ }else{
+   let title=$('editAssignTitle').value.trim();if(!title)return pop('Add a title.');
+   x.title=title;x.subject=$('editAssignSubject').value.trim();x.date=date;x.notes=$('editAssignNotes').value.trim()
+ }
+ save();closeAssignmentEdit();pop(editingAssignmentCollection==='exams'?'Exam updated.':'Assignment updated.')
+}
+function deleteEditingAssignment(){
+ let list=editingAssignmentCollection==='exams'?d.exams:d.assignments;
+ let i=list.findIndex(a=>a.id===editingAssignmentId);if(i<0)return;
+ let removed=list[i],collection=editingAssignmentCollection;
+ if(removed.done){d.xp=Math.max(0,d.xp-15);d.streak=Math.max(0,d.streak-1)}
+ list.splice(i,1);save();closeAssignmentEdit();
+ queueUndo(collection==='exams'?'Exam deleted.':'Assignment deleted.',()=>{
+   let target=collection==='exams'?d.exams:d.assignments;
+   target.splice(Math.min(i,target.length),0,removed);
+   if(removed.done){d.xp+=15;d.streak++}
+ })
+}
+
+function done(id){
+ let x=d.assignments.find(x=>x.id===id),collection='assignments';
+ if(!x){x=d.exams.find(x=>x.id===id);collection='exams'}
+ if(!x)return;
+ if(!x.done){
+  let oldXp=d.xp;x.done=true;x.completedAt=new Date().toISOString();d.xp+=15;d.streak++;save();
+  pop(collection==='exams'?'Exam completed! +15 XP':'Assignment completed! +15 XP');
+  celebrate('check',collection==='exams'?'Exam complete!':'Assignment complete!','Nice follow-through.','✅');maybeCelebrateLevel(oldXp,d.xp)
+ }else{
+  x.done=false;x.completedAt=null;d.xp=Math.max(0,d.xp-15);d.streak=Math.max(0,d.streak-1);save();
+  pop(collection==='exams'?'Exam moved back to Active.':'Assignment moved back to Active.')
+ }
+}function show(v){if($('headerQuickAdd'))$('headerQuickAdd').classList.toggle('hidden',v!=='dash');persistView(v);syncGlobalHelp();pushAppHistory(v);if($('floatingHelp'))$('floatingHelp').classList.toggle('hidden',v==='help');document.querySelectorAll('.view').forEach(x=>x.classList.remove('on'));$(v).classList.add('on');document.querySelectorAll('.nav button,.mobilebar button').forEach(x=>x.classList.toggle('on',x.dataset.v==v));document.querySelectorAll('#mobileMenu [data-v]').forEach(b=>b.classList.toggle('on',b.dataset.v===v));$('title').textContent={dash:'Dashboard',assign:'Assignments',exams:'Exams & Quizzes',academics:'Academics',schedule:'Full Schedule',study:'Study Mode',progress:'Progress',help:'Help & Quick Start',parent:'Parent Updates',settings:'Settings'}[v]}
+$('nav').onclick=e=>{let b=e.target.closest('[data-v]');if(b)show(b.dataset.v)};$('mobileNav').onclick=e=>{let b=e.target.closest('[data-v]');if(b)show(b.dataset.v)};function openAdd(t){
+ $('modal').classList.remove('hidden');
+ if(t)$('type').value=t;
+ $('date').value=off(1);
+ syncQuickActionFields()
+}function closeAdd(){$('modal').classList.add('hidden')}
+
+
+function syncQuickActionFields(){
+ let type=$('type').value,exam=type==='exam';
+ if($('examCourse')){
+   $('examCourse').classList.toggle('hidden',!exam);
+   if(exam){
+     $('examCourse').innerHTML=d.courses.map(c=>`<option value="${c.id}">${c.name}</option>`).join('')||'<option value="">Add a class in Academics first</option>'
+   }
+ }
+ if($('ititle'))$('ititle').classList.toggle('hidden',exam);
+ if($('subject'))$('subject').classList.toggle('hidden',exam);
+}
+
+function launchQuickAction(){
+ let type=$('type').value;
+ if(type==='course'){closeAdd();show('academics');academicTab('courses');setTimeout(()=>openCourse(),0);return}
+ if(type==='schedule'){closeAdd();show('schedule');setTimeout(()=>openActivity(),0);return}
+ if(type==='study'){closeAdd();show('study');return}
+ if(type==='parent'){closeAdd();show('parent');return}
+ // Assignment/exam use the entry fields already in this Quick Actions dialog.
+}
+$('type').addEventListener('change',()=>{syncQuickActionFields();launchQuickAction()});
+
+function addItem(){
+ let type=$('type').value;
+ if(type==='course'){closeAdd();show('academics');academicTab('courses');setTimeout(()=>openCourse(),0);return}
+ if(type==='schedule'){closeAdd();show('schedule');setTimeout(()=>openActivity(),0);return}
+ if(type==='study'){closeAdd();show('study');return}
+ if(type==='parent'){closeAdd();show('parent');return}
+ let date=$('date').value,notes=$('notes').value.trim();
+ if(!date)return pop('Choose a date.');
+ if(type==='exam'){
+   let courseId=$('examCourse').value,course=d.courses.find(c=>c.id===courseId);
+   if(!course)return pop('Add or choose a class first.');
+   let obj={id:crypto.randomUUID?crypto.randomUUID():String(Date.now()),type:'exam',title:course.name,subject:course.name,courseId,date,notes,done:false,completedAt:null};
+   d.exams.push(obj);save();closeAdd();show('dash');if($('headerQuickAdd'))$('headerQuickAdd').classList.toggle('hidden',false);pop('Exam / quiz added.');return
+ }
+ let title=$('ititle').value.trim(),subject=$('subject').value.trim();
+ if(!title)return pop('Add a title.');
+ d.assignments.push({id:crypto.randomUUID?crypto.randomUUID():String(Date.now()),type,title,subject,date,notes,done:false,completedAt:null});
+ save();closeAdd();show('dash');if($('headerQuickAdd'))$('headerQuickAdd').classList.toggle('hidden',false);pop('Assignment added.')
+}
+function saveProfile(){d.profile={name:$('sname').value.trim(),grade:$('grade').value};save();pop('Profile saved')}function saveParent(){let e=$('pemail').value.trim();if(e&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e))return pop('Enter a valid email address.');let pm=d.prefs.privacyMode!==false;sessionParentEmail=e;d.parent={name:$('pname').value.trim(),email:pm?'':e};save();$('pemail').value=e;pop(pm?'Contact name saved. Email kept for this session only.':'Contact saved in this browser profile.')}
+function summary(){
+ let a=d.assignments.filter(x=>!x.done).sort((a,b)=>a.date.localeCompare(b.date)).slice(0,5),
+ e=d.exams.filter(x=>!x.done).sort((a,b)=>a.date.localeCompare(b.date)).slice(0,3),
+ acts=getOccurrences(0,7).filter(x=>x.kind==='activity').slice(0,12);
+ let courseGrades=d.courses.map(c=>{
+   let gs=d.grades.filter(g=>g.courseId===c.id),earned=gs.reduce((n,g)=>n+Number(g.earned||0),0),possible=gs.reduce((n,g)=>n+Number(g.possible||0),0);
+   return possible?`• ${c.name}: ${Math.round(earned/possible*1000)/10}% (${gs.length} entered result${gs.length===1?'':'s'})`:null
+ }).filter(Boolean);
+ let recentGrades=d.assignments.filter(x=>x.grade).sort((a,b)=>(b.grade.enteredAt||'').localeCompare(a.grade.enteredAt||'')).slice(0,8);
+ $('preview').value=`Student Command Center Progress & Schedule Update
+Student: ${d.profile.name||'Student'}
+
+CURRENT ENTERED GRADES BY CLASS
+${courseGrades.length?courseGrades.join('\n'):'• No numerical class grades entered yet'}
+
+RECENTLY ENTERED ASSIGNMENT GRADES
+${recentGrades.length?recentGrades.map(x=>`• ${x.subject||'Class'} · ${x.title}: ${assignmentGradeText(x)}${x.grade.note?' — '+x.grade.note:''}`).join('\n'):'• No assignment grades entered yet'}
+
+UPCOMING ASSIGNMENTS
+${a.length?a.map(x=>'• '+x.title+' — '+new Date(x.date+'T12:00:00').toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'})+' ('+due(x.date)+')').join('\n'):'• None listed'}
+
+UPCOMING EXAMS / QUIZZES
+${e.length?e.map(x=>'• '+x.title+' — '+new Date(x.date+'T12:00:00').toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'})).join('\n'):'• None listed'}
+
+ACTIVITIES & EXTRACURRICULARS — NEXT 7 DAYS
+${acts.length?acts.map(x=>`• ${new Date(x.date+'T12:00:00').toLocaleDateString(undefined,{month:'short',day:'numeric'})} ${x.start?formatTime12(x.start):''} — ${x.title} [${x.category}]${x.location?' @ '+x.location:''}`).join('\n'):'• None listed'}
+
+ACADEMIC PLAN
+• ${d.projects.filter(p=>new Date(p.due+'T12:00:00')>=new Date()).length} active project(s)
+• ${d.semesterGoals.filter(g=>g.status==='Active').length} active semester goal(s)
+
+PROGRESS
+• ${d.assignments.filter(x=>x.done).length} assignment(s) completed
+• ${d.streak}-day study streak
+• ${d.xp} academic XP
+
+ACCOMPLISHMENT
+• Planning ahead and staying organized
+
+Note: Grades shown are student-entered planner records, not an official school gradebook.`
+}
+function emailUpdate(){summary();let e=d.parent.email||$('pemail').value.trim();if(!e)return pop('Add a parent/guardian email first.');location.href=`mailto:${encodeURIComponent(e)}?subject=${encodeURIComponent('Student Command Center update — '+(d.profile.name||'Student'))}&body=${encodeURIComponent($('preview').value)}`}
+
+
+function academicTab(name){
+ document.querySelectorAll('.acad-panel').forEach(x=>x.classList.add('hidden'));$('acad-'+name).classList.remove('hidden');
+ document.querySelectorAll('.academic-tabs button').forEach(x=>x.classList.toggle('active',x.dataset.a===name))
+}
+function courseName(id){return (d.courses.find(c=>c.id===id)||{}).name||'General'}
+function fillCourseSelect(id,includeGeneral=false){
+ let el=$(id);if(!el)return;el.innerHTML=(includeGeneral?'<option value="">General</option>':'')+d.courses.map(c=>`<option value="${c.id}">${c.name}</option>`).join('')
+}
+function renderAcademics(){
+ $('courseList').innerHTML=d.courses.map(c=>`<div class=course-card>
+<div class=row><div><strong>📘 ${c.name}</strong><div class=muted>${c.teacher||''}${c.room?' • '+c.room:''}${c.term?' • '+c.term:''}</div></div>
+<button class=btn onclick="openCourse('${c.id}')">Edit</button></div>
+<p>${c.days||'Schedule not set'}${c.time?' • '+formatTime12(c.time)+(c.endTime?'–'+formatTime12(c.endTime):''):''}</p>
+${c.altLabel?`<div class=muted>${c.altLabel}: ${formatTime12(c.altStart)}${c.altEnd?'–'+formatTime12(c.altEnd):''}</div>`:''}
+${c.target?`<span class=status>Target ${c.target}%</span>`:''}</div>`).join('')||'<span class=muted>No classes yet. Add your semester classes here.</span>';
+ $('projectList').innerHTML=d.projects.map(p=>`<div class=item><div class=row><div><strong>📁 ${p.name}</strong><span class=muted>${courseName(p.courseId)} • Due ${p.due}</span></div><button class=btn onclick="deleteAcademic('project','${p.id}')">Delete</button></div>${p.steps.map((s,i)=>`<label class=project-step><input type=checkbox ${s.done?'checked':''} onchange="toggleProjectStep('${p.id}',${i})"> ${s.text}</label>`).join('')}<div class=muted>${p.notes||''}</div></div>`).join('')||'<span class=muted>No projects yet.</span>';
+ let gradeHTML=d.courses.map(c=>{let gs=d.grades.filter(g=>g.courseId===c.id),earned=gs.reduce((n,g)=>n+Number(g.earned),0),possible=gs.reduce((n,g)=>n+Number(g.possible),0),avg=possible?Math.round(earned/possible*1000)/10:null;return `<div class=course-card><strong>${c.name}</strong><div class=grade-big>${avg===null?'—':avg+'%'}</div><div class=muted>${gs.length} result(s) entered${c.target?' • Target '+c.target+'%':''}</div>${gs.map(g=>`<div class=row><span>${g.item}</span><span>${g.earned}/${g.possible}</span></div>`).join('')}</div>`}).join('');
+ $('gradeList').innerHTML=gradeHTML||'<span class=muted>Add a course before tracking grades.</span>';
+ $('goalList').innerHTML=d.semesterGoals.map(g=>`<div class=goal-card><div class=row><strong>🎯 ${g.title}</strong><button class=btn onclick="deleteAcademic('goal','${g.id}')">Delete</button></div><p class=muted>Action: ${g.action}</p><div class=row><span>Review by ${g.date}</span><span class=status>${g.status}</span></div></div>`).join('')||'<span class=muted>No semester goals yet.</span>';
+ $('noteList').innerHTML=d.notes.map(n=>`<div class=note-card><div class=row><strong>🗒 ${n.title}</strong><button class=btn onclick="deleteAcademic('note','${n.id}')">Delete</button></div><span class=muted>${courseName(n.courseId)}</span><p>${n.body}</p></div>`).join('')||'<span class=muted>No notes yet.</span>';
+ ['projectCourse','gradeCourse','noteCourse'].forEach(id=>fillCourseSelect(id,id==='noteCourse'));
+ let weekdays=[['Mon','Monday'],['Tue','Tuesday'],['Wed','Wednesday'],['Thu','Thursday'],['Fri','Friday']];
+ if($('schoolTimetable'))$('schoolTimetable').innerHTML=weekdays.map(([key,label])=>{
+   let cs=d.courses.filter(c=>(c.days||'').toLowerCase().includes(key.toLowerCase())||(c.days||'').toLowerCase().includes(label.toLowerCase())).sort((a,b)=>(a.time||'').localeCompare(b.time||''));
+   return `<div class=school-day><strong>${label}</strong>${cs.map(c=>`<div class=class-block><b>${c.time?formatTime12(c.time)+(c.endTime?'–'+formatTime12(c.endTime):''):'Time TBD'}</b><br>${c.name}${c.room?' • '+c.room:''}${c.altLabel?`<br><span class=muted>${c.altLabel}: ${formatTime12(c.altStart)}${c.altEnd?'–'+formatTime12(c.altEnd):''}</span>`:''}</div>`).join('')||'<div class=muted>No class entered</div>'}</div>`
+ }).join('')
+}
+function closeModal(id){$(id).classList.add('hidden')}
+let editingCourseId=null;
+function initCourseTimeSelectors(){
+ fillTimeSelectors();
+ ['courseStart','courseEnd','courseAltStart','courseAltEnd'].forEach(prefix=>{
+   let hours=$(prefix+'Hour'),mins=$(prefix+'Minute');
+   if(hours&&!hours.options.length)hours.innerHTML=[1,2,3,4,5,6,7,8,9,10,11,12].map(x=>`<option value="${x}">${x}</option>`).join('');
+   if(mins&&!mins.options.length)mins.innerHTML=['00','05','10','15','20','25','30','35','40','45','50','55'].map(x=>`<option value="${x}">${x}</option>`).join('')
+ })
+}
+function openCourse(id=null){
+ initCourseTimeSelectors();
+ editingCourseId=id;
+ let c=id?d.courses.find(x=>x.id===id):null;
+ $('courseModalTitle').textContent=c?'Edit Class / Course':'Add Class / Course';
+ $('saveCourseBtn').textContent=c?'Save changes':'Save class';
+ $('deleteCourseBtn').classList.toggle('hidden',!c);
+ $('courseName').value=c?.name||'';
+ $('courseTeacher').value=c?.teacher||'';
+ $('courseRoom').value=c?.room||'';
+ $('courseTerm').value=c?.term||'';
+ $('courseDays').value=c?.days||'';
+ $('courseTarget').value=c?.target||'';
+ setTimeSelector('courseStart',c?.time||'08:00');
+ setTimeSelector('courseEnd',c?.endTime||'08:50');
+ $('courseAltLabel').value=c?.altLabel||'';
+ setTimeSelector('courseAltStart',c?.altStart||c?.time||'08:00');
+ setTimeSelector('courseAltEnd',c?.altEnd||c?.endTime||'08:50');
+ $('courseModal').classList.remove('hidden')
+}
+function closeCourse(){closeModal('courseModal');editingCourseId=null}
+function saveCourse(){
+ let name=$('courseName').value.trim();
+ if(!name)return pop('Add a class / course name.');
+ let obj={
+   name,
+   teacher:$('courseTeacher').value.trim(),
+   room:$('courseRoom').value.trim(),
+   term:$('courseTerm').value.trim(),
+   target:Number($('courseTarget').value)||null,
+   days:$('courseDays').value.trim(),
+   time:getTimeSelector('courseStart'),
+   endTime:getTimeSelector('courseEnd'),
+   altLabel:$('courseAltLabel').value.trim(),
+   altStart:getTimeSelector('courseAltStart'),
+   altEnd:getTimeSelector('courseAltEnd')
+ };
+ if(editingCourseId){
+   let c=d.courses.find(x=>x.id===editingCourseId);if(!c)return;
+   Object.assign(c,obj);save();closeCourse();pop('Class updated.')
+ }else{
+   d.courses.push({id:'c'+Date.now().toString(36),...obj});save();closeCourse();show('dash');pop('Class added.')
+ }
+}
+function deleteEditingCourse(){
+ if(!editingCourseId)return;
+ let id=editingCourseId;
+ if(!confirm('Delete this class? Related projects, grades and course notes will also be removed.'))return;
+ deleteAcademic('course',id);closeCourse()
+}
+function openProject(){if(!d.courses.length)return pop('Add a course first.');fillCourseSelect('projectCourse');$('projectDue').value=off(7);$('projectModal').classList.remove('hidden')}
+function saveProject(){if(!$('projectName').value.trim()||!$('projectDue').value)return pop('Add a project name and due date.');let steps=$('projectSteps').value.split(',').map(x=>x.trim()).filter(Boolean).map(text=>({text,done:false}));d.projects.push({id:'pr'+Date.now().toString(36),name:$('projectName').value.trim(),courseId:$('projectCourse').value,due:$('projectDue').value,steps,notes:$('projectNotes').value.trim()});d.xp+=5;save();closeModal('projectModal');pop('Project added! +5 XP')}
+function toggleProjectStep(id,i){
+ let p=d.projects.find(x=>x.id===id);if(!p)return;
+ let wasDone=!!p.steps[i].done;
+ p.steps[i].done=!wasDone;
+ if(p.steps[i].done){
+   let oldXp=d.xp;d.xp+=5;save();
+   celebrate('project','Project milestone!','Another step completed.','🎯');
+   maybeCelebrateLevel(oldXp,d.xp)
+ }else{
+   d.xp=Math.max(0,d.xp-5);save()
+ }
+}
+function openGrade(){if(!d.courses.length)return pop('Add a course first.');fillCourseSelect('gradeCourse');$('gradeModal').classList.remove('hidden')}
+function saveGrade(){let e=Number($('gradeEarned').value),p=Number($('gradePossible').value);if(!$('gradeItem').value.trim()||!Number.isFinite(e)||!Number.isFinite(p)||p<=0||e<0)return pop('Add an assessment and valid points.');if(e>p&&!confirm('Points earned are higher than points possible. Continue as extra credit?'))return;d.grades.push({id:'g'+Date.now().toString(36),courseId:$('gradeCourse').value,item:$('gradeItem').value.trim(),earned:e,possible:p});save();closeModal('gradeModal');pop('Grade added.')}
+function openGoal(){$('goalDate').value=off(30);$('goalModal').classList.remove('hidden')}
+function saveGoal(){if(!$('goalTitle').value.trim()||!$('goalAction').value.trim())return pop('Add both a goal and an action you control.');d.semesterGoals.push({id:'sg'+Date.now().toString(36),title:$('goalTitle').value.trim(),action:$('goalAction').value.trim(),date:$('goalDate').value,status:$('goalStatus').value});save();closeModal('goalModal');pop('Semester goal added.')}
+function openNote(){fillCourseSelect('noteCourse',true);$('noteModal').classList.remove('hidden')}
+function saveNote(){if(!$('noteTitle').value.trim())return pop('Add a note title.');d.notes.push({id:'n'+Date.now().toString(36),title:$('noteTitle').value.trim(),courseId:$('noteCourse').value,body:$('noteBody').value.trim()});save();closeModal('noteModal');pop('Note saved.')}
+function deleteAcademic(type,id){
+ let snapshot=structuredClone({courses:d.courses,projects:d.projects,grades:d.grades,semesterGoals:d.semesterGoals,notes:d.notes});
+ if(type==='course'){d.courses=d.courses.filter(x=>x.id!==id);d.projects=d.projects.filter(x=>x.courseId!==id);d.grades=d.grades.filter(x=>x.courseId!==id);d.notes=d.notes.filter(x=>x.courseId!==id)}
+ if(type==='project')d.projects=d.projects.filter(x=>x.id!==id);
+ if(type==='goal')d.semesterGoals=d.semesterGoals.filter(x=>x.id!==id);
+ if(type==='note')d.notes=d.notes.filter(x=>x.id!==id);
+ save();queueUndo('Item removed.',()=>{d.courses=snapshot.courses;d.projects=snapshot.projects;d.grades=snapshot.grades;d.semesterGoals=snapshot.semesterGoals;d.notes=snapshot.notes})
+}
+function isoDate(dt){return dt.toISOString().slice(0,10)}
+function mondayOf(date=new Date()){let x=new Date(date);x.setHours(12,0,0,0);let day=x.getDay();x.setDate(x.getDate()-(day===0?6:day-1));return x}
+function categoryIcon(c){return {'Sports':'🏅','Band/Music':'🎵','Theater/Arts':'🎭','Club':'♟','Tutoring':'📖','Work':'💼','Volunteer':'🤝','Academic':'📚','Personal':'👤','Other':'•'}[c]||'•'}
+function activityOccurs(a,dt){
+ let ds=isoDate(dt), dow=dt.getDay(), base=new Date(a.date+'T12:00:00');
+ if(dt<new Date(base.getFullYear(),base.getMonth(),base.getDate(),0,0,0))return false;
+ if(a.repeat==='none')return a.date===ds;
+ if(a.repeat==='weekly')return dow===base.getDay();
+ if(a.repeat==='weekdays')return dow>=1&&dow<=5;
+ if(a.repeat==='custom')return (a.days||[]).map(Number).includes(dow);
+ return false
+}
+function getOccurrences(startOffset=0,span=7){
+ let out=[],now=new Date;now.setHours(12,0,0,0);
+ for(let i=startOffset;i<startOffset+span;i++){
+   let dt=new Date(now);dt.setDate(now.getDate()+i);let ds=isoDate(dt);
+   d.activities.forEach(a=>{if(activityOccurs(a,dt))out.push({...a,date:ds,kind:'activity'})});d.courses.forEach(c=>{let occ=classOccurrence(c,dt);if(occ)out.push(occ)});
+   d.assignments.filter(x=>!x.done&&x.date===ds).forEach(x=>out.push({...x,start:'23:59',category:'Assignment Due',kind:'assignment'}));
+   d.exams.filter(x=>!x.done&&x.date===ds).forEach(x=>out.push({...x,start:'08:00',category:'Exam / Quiz',kind:'exam'}));
+ }
+ return out.sort((a,b)=>(a.date+a.start).localeCompare(b.date+b.start))
+}
+function occurrenceHTML(x){
+ let ic=x.kind==='assignment'?'📝':x.kind==='exam'?'🧠':x.kind==='class'?'🎓':categoryIcon(x.category);
+ let label=x.kind==='assignment'?'Assignment Due':x.kind==='exam'?'Exam / Quiz':x.kind==='class'?'Class':(x.category||x.subject||'Schedule');
+ let time=x.start?formatTime12(x.start):'All day';
+ return `<div class="schedule-event"><b>${time}</b><span class="event-dot"></span><div><strong>${ic} ${x.title}</strong><span class="muted schedule-meta">${label}${x.location?' · '+x.location:''}</span></div>${x.kind==='activity'?`<button class="btn" onclick="editActivity('${x.id}')">Edit</button>`:''}</div>`
+}
+let scheduleMode='daily';
+function setScheduleView(mode){scheduleMode=mode;$('dailyTab').classList.toggle('active',mode==='daily');$('weeklyTab').classList.toggle('active',mode==='weekly');$('dailySchedule').classList.toggle('hidden',mode!=='daily');$('weeklySchedule').classList.toggle('hidden',mode!=='weekly');$('phoneWeeklySchedule').classList.toggle('hidden',mode!=='weekly')}
+
+function dateRange(start,end){
+ let out=[],a=new Date(start+'T12:00:00'),b=new Date(end+'T12:00:00');
+ if(isNaN(a)||isNaN(b)||a>b)return out;
+ for(let x=new Date(a);x<=b;x.setDate(x.getDate()+1))out.push(isoDate(x));
+ return out
+}
+function setSchoolDayRange(){
+ let start=$('schoolDayStart').value,end=$('schoolDayEnd').value||start,type=$('schoolDayType').value;
+ if(!start)return pop('Choose a date.');
+ let dates=dateRange(start,end);if(!dates.length)return pop('Choose a valid date range.');
+ dates.forEach(ds=>{if(type==='normal')delete d.schoolDays[ds];else d.schoolDays[ds]=type});
+ save();pop(type==='normal'?'Normal schedule restored.':type==='shortened'?'Shortened schedule applied.':'No School applied.')
+}
+function schoolDayType(ds){return d.schoolDays?.[ds]||'normal'}
+function classMeetsOnDate(c,dt){
+ let ds=isoDate(dt);if(schoolDayType(ds)==='none')return false;
+ let names=[['sun','sunday'],['mon','monday'],['tue','tuesday'],['wed','wednesday'],['thu','thursday'],['fri','friday'],['sat','saturday']][dt.getDay()];
+ let raw=(c.days||'').toLowerCase();return names.some(n=>raw.includes(n))
+}
+function classOccurrence(c,dt){
+ if(!classMeetsOnDate(c,dt))return null;
+ let ds=isoDate(dt),short=schoolDayType(ds)==='shortened';
+ return {id:'class-'+c.id+'-'+ds,title:c.name,category:'Academic',date:ds,start:short?(c.altStart||c.time):c.time,end:short?(c.altEnd||c.endTime):c.endTime,location:c.room||'',kind:'class',dayType:short?'Shortened Day':'Normal Day'}
+}
+function initSchoolDayControls(){
+ if(!$('schoolDayStart'))return;let t=isoDate(new Date);
+ if(!$('schoolDayStart').value)$('schoolDayStart').value=t;
+ if(!$('schoolDayEnd').value)$('schoolDayEnd').value=t
+}
+function renderSchoolDayOverrides(){
+ if(!$('schoolDayOverrides'))return;
+ let entries=Object.entries(d.schoolDays||{}).sort((a,b)=>a[0].localeCompare(b[0])).filter(([ds])=>days(ds)>=-7&&days(ds)<=60);
+ $('schoolDayOverrides').innerHTML=entries.map(([ds,t])=>`<div class=item><div class=row><div><strong>${t==='shortened'?'Shortened Day':'No School'}</strong><span class=muted>${new Date(ds+'T12:00:00').toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'})}</span></div><button class=btn onclick="delete d.schoolDays['${ds}'];save()">Restore Normal</button></div></div>`).join('')||'<span class=muted>No school-day overrides set.</span>'
+}
+
+
+function groupedScheduleHTML(items,emptyText='Nothing scheduled.'){
+ if(!items.length)return `<span class=muted>${emptyText}</span>`;
+ let groups={};
+ items.forEach(x=>(groups[x.date]||(groups[x.date]=[])).push(x));
+ return Object.keys(groups).sort().map(ds=>{
+   let dayItems=groups[ds].sort((a,b)=>(a.start||'23:59').localeCompare(b.start||'23:59'));
+   let dt=new Date(ds+'T12:00:00'),isToday=ds===isoDate(new Date);
+   return `<section class="schedule-day-card ${isToday?'today-day':''}">
+     <div class="schedule-day-head">
+       <div><strong>${dt.toLocaleDateString(undefined,{weekday:'long'})}</strong>
+       <span class="muted">${dt.toLocaleDateString(undefined,{month:'long',day:'numeric',year:'numeric'})}</span></div>
+       <span class="pill">${dayItems.length} item${dayItems.length===1?'':'s'}</span>
+     </div>
+     <div class="schedule-day-items">${dayItems.map(occurrenceHTML).join('')}</div>
+   </section>`
+ }).join('')
+}
+
+function renderSchedules(){
+ initSchoolDayControls();
+ let today=getOccurrences(0,1);
+ $('todaySnapshot').innerHTML=groupedScheduleHTML(today,'Nothing scheduled today.');
+ $('dailySchedule').innerHTML=groupedScheduleHTML(today,'Nothing scheduled today.');
+ let upcoming=getOccurrences(0,21); $('activityList').innerHTML=groupedScheduleHTML(upcoming,'Nothing upcoming.');
+ let mon=mondayOf(), boxes=[];
+ for(let i=0;i<7;i++){let dt=new Date(mon);dt.setDate(mon.getDate()+i);let ds=isoDate(dt), events=[];
+   d.activities.forEach(a=>{if(activityOccurs(a,dt))events.push({...a,date:ds,kind:'activity'})}); d.courses.forEach(c=>{let occ=classOccurrence(c,dt);if(occ)events.push(occ)}); d.assignments.filter(x=>!x.done&&x.date===ds).forEach(x=>events.push({...x,start:'23:59',category:'Assignment Due',kind:'assignment'}));
+   d.exams.filter(x=>!x.done&&x.date===ds).forEach(x=>events.push({...x,start:'08:00',category:'Exam / Quiz',kind:'exam'}));
+   events.sort((a,b)=>(a.start||'').localeCompare(b.start||''));
+   let isToday=ds===isoDate(new Date);
+   boxes.push(`<div class="week-day ${isToday?'today':''}"><h4>${dt.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'})}</h4>${events.map(x=>`<div class=week-event><b>${x.start?formatTime12(x.start):'All day'}</b> ${x.kind==='assignment'?'📝':x.kind==='exam'?'🧠':categoryIcon(x.category)} ${x.title}</div>`).join('')||'<span class=muted>Open</span>'}</div>`)
+ }
+ $('weeklySchedule').innerHTML=boxes.join('');let phoneBoxes=[];for(let i=0;i<7;i++){let dt=new Date(mon);dt.setDate(mon.getDate()+i);let ds=isoDate(dt),events=[];d.activities.forEach(a=>{if(activityOccurs(a,dt))events.push({...a,date:ds,kind:'activity'})});d.courses.forEach(c=>{let occ=classOccurrence(c,dt);if(occ)events.push(occ)});d.assignments.filter(x=>!x.done&&x.date===ds).forEach(x=>events.push({...x,start:'23:59',category:'Assignment Due',kind:'assignment'}));d.exams.filter(x=>!x.done&&x.date===ds).forEach(x=>events.push({...x,start:'08:00',category:'Exam / Quiz',kind:'exam'}));events.sort((a,b)=>(a.start||'').localeCompare(b.start||''));phoneBoxes.push(`<div class=phone-day><h4>${dt.toLocaleDateString(undefined,{weekday:'long',month:'short',day:'numeric'})}</h4>${events.map(x=>`<div class=week-event><b>${x.start?formatTime12(x.start):'All day'}</b> ${x.kind==='assignment'?'📝':x.kind==='exam'?'🧠':categoryIcon(x.category)} ${x.title}</div>`).join('')||'<span class=muted>Open</span>'}</div>`)}$('phoneWeeklySchedule').innerHTML=phoneBoxes.join('')
+renderSchoolDayOverrides();}
+let editingActivityId=null;
+function time12Parts(t){
+ if(!t)return {clock:'',period:'PM'};
+ let [h,m]=t.split(':').map(Number),period=h>=12?'PM':'AM',hh=h%12||12;
+ return {clock:`${hh}:${String(m||0).padStart(2,'0')}`,period}
+}
+function clearActivityForm(){
+ editingActivityId=null;
+ $('activityModalTitle').textContent='Add Schedule Activity';
+ $('saveActivityBtn').textContent='Save activity';
+ $('deleteActivityBtn').classList.add('hidden');
+ $('actTitle').value='';$('actCategory').value='Sports';$('actDate').value=off(1);$('actLocation').value='';
+ setTimeSelector('actStart','16:00');setTimeSelector('actEnd','17:30');
+ $('actRepeat').value='none';$('actNotes').value='';$('customDays').classList.add('hidden');
+ $('customDays').querySelectorAll('input').forEach(x=>x.checked=false)
+}
+function setActivityModalChrome(open){if($('mobileNav'))$('mobileNav').classList.toggle('hidden',open);if($('floatingHelp'))$('floatingHelp').classList.toggle('hidden',open)}
+function openActivity(){document.body.classList.add('modal-open');clearActivityForm();setActivityModalChrome(true);$('activityModal').classList.remove('hidden')}
+function editActivity(id){
+ let a=d.activities.find(x=>x.id===id);if(!a)return;
+ editingActivityId=id;$('activityModalTitle').textContent='Edit Activity';$('saveActivityBtn').textContent='Save changes';$('deleteActivityBtn').classList.remove('hidden');
+ $('actTitle').value=a.title||'';$('actCategory').value=a.category||'Other';$('actDate').value=a.date||off(1);$('actLocation').value=a.location||'';
+ setTimeSelector('actStart',a.start||'16:00');setTimeSelector('actEnd',a.end||'17:30');
+ $('actRepeat').value=a.repeat||'none';$('actNotes').value=a.notes||'';
+ let days=new Set(a.days||[]);$('customDays').querySelectorAll('input').forEach(x=>x.checked=days.has(Number(x.value)));toggleCustomDays();
+ setActivityModalChrome(true);$('activityModal').classList.remove('hidden')
+}
+function closeActivity(){document.body.classList.remove('modal-open');$('activityModal').classList.add('hidden');editingActivityId=null;setActivityModalChrome(false)}
+function toggleCustomDays(){$('customDays').classList.toggle('hidden',$('actRepeat').value!=='custom')}
+function saveActivity(){
+ let start=getTimeSelector('actStart'),end=getTimeSelector('actEnd');
+ if(!$('actTitle').value.trim()||!$('actDate').value||!start)return pop('Add an activity, date and valid start time.');
+ let loc=$('actLocation').value.trim();if(d.prefs.privacyMode!==false&&looksTooPreciseLocation(loc))return pop('For privacy, use a general location such as “School Gym” instead of a street address, ZIP code, or coordinates.');
+ let selected=[...$('customDays').querySelectorAll('input:checked')].map(x=>Number(x.value));
+ let obj={title:$('actTitle').value.trim(),category:$('actCategory').value,date:$('actDate').value,start:start,end:end,location:loc,repeat:$('actRepeat').value,days:selected,notes:$('actNotes').value.trim()};
+ if(editingActivityId){
+   let i=d.activities.findIndex(x=>x.id===editingActivityId);if(i<0)return;
+   d.activities[i]={...d.activities[i],...obj};save();closeActivity();show('dash');pop('Activity updated.')
+ }else{
+   d.activities.push({id:'x'+Date.now().toString(36),...obj});d.xp+=5;save();closeActivity();pop('Activity added! +5 XP for planning ahead.')
+ }
+}
+function deleteEditingActivity(){if(editingActivityId)deleteActivity(editingActivityId);closeActivity()}
+function deleteActivity(id){
+ let i=d.activities.findIndex(x=>x.id===id);if(i<0)return;let removed=d.activities[i];
+ d.activities.splice(i,1);save();queueUndo('Activity removed.',()=>d.activities.splice(Math.min(i,d.activities.length),0,removed))
+}
+
+function toggleTip(id){$(id).classList.toggle('open')}
+function filterHelp(){let q=($('helpSearch').value||'').trim().toLowerCase(),r=$('helpSearchResults'),shown=0;r.innerHTML='';document.querySelectorAll('#helpTopics .help-topic').forEach(t=>{let hay=(t.dataset.keywords+' '+t.textContent).toLowerCase();if(q&&hay.includes(q)){r.appendChild(t.cloneNode(true));shown++}});$('noHelp').classList.toggle('hidden',!q||shown>0)}
+$('helpSearch').addEventListener('input',filterHelp);
+document.querySelectorAll('.setupItem').forEach((x,i)=>{
+ x.checked=storageOK&&localStorage.getItem('pm_scc_help_'+i)==='1';
+ x.addEventListener('change',()=>{if(storageOK)try{localStorage.setItem('pm_scc_help_'+i,x.checked?'1':'0')}catch(e){}})
+});
+
+
+document.addEventListener('keydown',e=>{
+ if(e.key==='Escape'){
+   ['modal','activityModal','courseModal','projectModal','gradeModal','goalModal','noteModal'].forEach(id=>{let el=$(id);if(el&&!el.classList.contains('hidden'))el.classList.add('hidden')})
+ }
+});
+
+
+
+
+
+let sessionParentEmail='';
+
+function exportPrivacySafe(){
+ let x=structuredClone(d);
+ if(x.parent)x.parent.email='';
+ (x.activities||[]).forEach(a=>{a.location=''});
+ let blob=new Blob([JSON.stringify(x,null,2)],{type:'application/json'});
+ let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='student-command-center-privacy-safe-backup.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);pop('Privacy-safe backup exported without parent email or activity locations.')
+}
+function renderReleaseGate(){
+ let secure=location.protocol==='https:'||['localhost','127.0.0.1'].includes(location.hostname);
+ let gates=[
+  ['Privacy-first mode',d.prefs.privacyMode!==false],
+  ['Content Security Policy',!!document.querySelector('meta[http-equiv="Content-Security-Policy"]')],
+  ['No-referrer policy',!!document.querySelector('meta[name="referrer"][content="no-referrer"]')],
+  ['Persistent storage check',storageOK],
+  ['HTTPS staging',secure],
+  ['Real-device QA',false],
+  ['Accessibility QA',false],
+  ['Child-privacy/legal review if applicable',false]
+ ];
+ $('releaseGate').innerHTML=gates.map(([n,ok])=>`<div class=gate-row><span>${n}</span><strong>${ok?'✓ Passed':'○ Required'}</strong></div>`).join('')
+}
+
+function savePrivacyMode(){d.prefs.privacyMode=$('privacyMode').checked;if(d.prefs.privacyMode){d.parent.email='';sessionParentEmail=$('pemail').value.trim()}save()}
+function looksTooPreciseLocation(v){let s=(v||'').trim();return /\b\d{1,6}\s+[A-Za-z]/.test(s)||/\b\d{5}(?:-\d{4})?\b/.test(s)||/(?:-?\d{1,3}\.\d{3,})\s*,\s*(?:-?\d{1,3}\.\d{3,})/.test(s)}
+
+function privacyAudit(){
+ let findings=[];
+ if(sessionParentEmail||(d.parent&&d.parent.email))findings.push('Parent/guardian email is stored locally in this browser profile.');
+ let locs=(d.activities||[]).map(x=>x.location||'').filter(Boolean);
+ if(locs.length)findings.push(`${locs.length} activity location entr${locs.length===1?'y is':'ies are'} stored locally. Keep locations general.`);
+ if(!findings.length)findings.push('No parent email or activity locations are currently entered.');
+ findings.push('No advertising or behavioral-tracking scripts are included in this package.');
+ $('privacyAuditResult').innerHTML=findings.map(x=>'• '+x).join('<br>')
+}
+function clearPlannerData(){
+ if(!confirm('Delete Student Command Center planner data from this browser profile? This cannot be undone unless you exported a backup.'))return;
+ if(!confirm('Final confirmation: permanently clear this planner data?'))return;
+ if(storageOK)try{localStorage.removeItem(K);for(let i=0;i<5;i++)localStorage.removeItem('pm_scc_help_'+i);localStorage.removeItem('pm_scc_onboarded')}catch(e){}
+ sessionParentEmail='';d=structuredClone(demo);render();renderStorageStatus();pop('Planner data cleared from this browser profile.')
+}
+
+let onboardIndex=0;
+function renderOnboarding(){
+ document.querySelectorAll('.onboard-step').forEach((x,i)=>x.classList.toggle('active',i===onboardIndex));
+ document.querySelectorAll('.dots .dot').forEach((x,i)=>x.classList.toggle('on',i===onboardIndex));
+ $('onboardBack').disabled=onboardIndex===0;$('onboardNext').textContent=onboardIndex===3?'Start planning':'Next'
+}
+function onboardMove(n){if(onboardIndex===3&&n>0)return finishOnboarding();onboardIndex=Math.max(0,Math.min(3,onboardIndex+n));renderOnboarding()}
+function finishOnboarding(){if(storageOK)try{localStorage.setItem('pm_scc_onboarded','1')}catch(e){};$('onboarding').classList.add('hidden')}
+function maybeOnboard(){let done=false;if(storageOK)try{done=localStorage.getItem('pm_scc_onboarded')==='1'}catch(e){};if(!done){$('onboarding').classList.remove('hidden');renderOnboarding()}}
+function renderPWAReadiness(){
+ let secure=location.protocol==='https:'||['localhost','127.0.0.1'].includes(location.hostname);
+ let manifest=!!document.querySelector('link[rel="manifest"]'),sw='serviceWorker' in navigator;
+ let rows=[['Secure hosting',secure],['Web app manifest',manifest],['Service worker support',sw],['Persistent browser storage',storageOK]];
+ $('pwaReadiness').innerHTML=rows.map(([n,ok])=>`<div class=ready-row><span>${n}</span><strong>${ok?'✓ Ready':'— Not active'}</strong></div>`).join('')
+}
+
+let deferredInstallPrompt=null;
+function updateConnection(){let el=$('connectionState');if(!el)return;el.innerHTML=navigator.onLine?'<strong>● Online</strong><div class=muted>Connected. Core files can also be cached for offline reopening when service-worker support is active.</div>':'<strong>○ Offline</strong><div class=muted>Locally available planner features can still work. Network-dependent actions may need a connection.</div>'}
+window.addEventListener('online',updateConnection);window.addEventListener('offline',updateConnection);
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstallPrompt=e;$('installCard').classList.add('show')});
+$('installBtn').addEventListener('click',async()=>{if(!deferredInstallPrompt)return;deferredInstallPrompt.prompt();await deferredInstallPrompt.userChoice;deferredInstallPrompt=null;$('installCard').classList.remove('show')});
+window.addEventListener('appinstalled',()=>{$('installCard').classList.remove('show');pop('Student Command Center installed.')});
+function detectIOSInstall(){let ios=/iphone|ipad|ipod/i.test(navigator.userAgent),standalone=window.matchMedia('(display-mode: standalone)').matches||navigator.standalone;if(ios&&!standalone)$('iosInstall').classList.remove('hidden')}
+if('serviceWorker' in navigator && (location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1'))window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').then(reg=>{reg.addEventListener('updatefound',()=>{let nw=reg.installing;if(nw)nw.addEventListener('statechange',()=>{if(nw.state==='installed'&&navigator.serviceWorker.controller)pop('An app update is ready. Reopen to use the latest version.')})})}).catch(()=>{}));
+
+let sec=1500,tid=null,studyState={running:false,paused:false,endAt:null,remaining:1500,totalMinutes:25},studyHistory=[];
+function xpForStudyMinutes(mins){if(mins<=15)return 10;if(mins<=30)return 25;if(mins<=45)return 35;return 40}
+function studyRewardText(){let mins=Math.max(1,Math.round(studyState.totalMinutes||25)),xp=xpForStudyMinutes(mins);if($('studyRewardText'))$('studyRewardText').textContent=`Complete this ${mins}-minute focus session to earn ${xp} XP.`}
+function selectStudyPreset(mins){document.querySelectorAll('#studyPresets [data-min]').forEach(b=>{let on=Number(b.dataset.min)===mins;b.classList.toggle('primary',on);b.classList.toggle('selected',on)})}
+function setStudyMinutes(mins){if(studyState.running||studyState.paused)return pop('Reset the current session before changing the duration.');studyState.totalMinutes=mins;sec=mins*60;studyState.remaining=sec;studyState.endAt=null;selectStudyPreset(mins);$('customMinutes').value='';clock();studyRewardText();saveStudyState()}
+function applyCustomMinutes(){let mins=Number($('customMinutes').value);if(!Number.isFinite(mins)||mins<5||mins>120)return pop('Choose a custom focus time from 5 to 120 minutes.');setStudyMinutes(Math.round(mins));selectStudyPreset(-1)}
+function saveStudyState(){if(storageOK)try{localStorage.setItem('pm_scc_study_timer',JSON.stringify(studyState));localStorage.setItem('pm_scc_study_goal',$('goal')?.value||'');localStorage.setItem('pm_scc_study_history',JSON.stringify(studyHistory.slice(0,20)))}catch(e){}}
+function loadStudyState(){if(storageOK)try{let s=JSON.parse(localStorage.getItem('pm_scc_study_timer')||'null');if(s)studyState=s;if(!studyState.totalMinutes)studyState.totalMinutes=Math.max(5,Math.round((studyState.remaining||1500)/60));let g=localStorage.getItem('pm_scc_study_goal');if(g&&$('goal'))$('goal').value=g;studyHistory=JSON.parse(localStorage.getItem('pm_scc_study_history')||'[]')||[]}catch(e){studyHistory=[]}}
+function renderStudyHistory(){if(!$('studyHistory'))return;$('studyHistory').innerHTML=studyHistory.length?studyHistory.slice(0,8).map(s=>`<div class=item><strong>✅ ${s.minutes}-minute focus session</strong><span class=muted>${s.goal||'Focused study'} • +${s.xp} XP • ${s.when}</span></div>`).join(''):'<span class=muted>No completed focus sessions yet.</span>'}
+function clock(){$('clock').textContent=String(Math.floor(sec/60)).padStart(2,'0')+':'+String(sec%60).padStart(2,'0')}
+function completeStudySession(){if(tid){clearInterval(tid);tid=null}let mins=studyState.totalMinutes||25,xp=xpForStudyMinutes(mins),goalText=$('goal')?.value.trim()||'Focused study';studyHistory.unshift({minutes:mins,xp,goal:goalText,when:new Date().toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'})});studyState={running:false,paused:false,endAt:null,remaining:mins*60,totalMinutes:mins};d.xp+=xp;d.streak++;sec=mins*60;saveStudyState();save();clock();$('start').textContent='Start';renderStudyHistory();studyRewardText();pop(`Focus session complete! +${xp} XP`);celebrate('study','Focus session complete!',`${mins} minutes of focused work.`,`⏱️`);maybeCelebrateLevel((d.xp-xp),d.xp)}
+function startTicker(){if(tid)clearInterval(tid);if(!studyState.running||!studyState.endAt)return;$('start').textContent='Pause';tid=setInterval(()=>{if(!studyState.running){clearInterval(tid);tid=null;return}sec=Math.max(0,Math.ceil((studyState.endAt-Date.now())/1000));studyState.remaining=sec;clock();if(sec<=0)completeStudySession()},1000)}
+function reconcileStudyTimer(){if(studyState.running&&studyState.endAt){sec=Math.max(0,Math.ceil((studyState.endAt-Date.now())/1000));studyState.remaining=sec;if(sec<=0){completeStudySession();return}$('start').textContent='Pause';clock();startTicker()}else if(studyState.paused){if(tid){clearInterval(tid);tid=null}sec=studyState.remaining||((studyState.totalMinutes||25)*60);$('start').textContent='Resume';clock()}else{if(tid){clearInterval(tid);tid=null}sec=(studyState.totalMinutes||25)*60;studyState.remaining=sec;studyState.endAt=null;$('start').textContent='Start';clock()}}
+$('start').onclick=()=>{if(studyState.running){sec=Math.max(0,Math.ceil((studyState.endAt-Date.now())/1000));studyState.running=false;studyState.paused=true;studyState.remaining=sec;studyState.endAt=null;if(tid){clearInterval(tid);tid=null}saveStudyState();$('start').textContent='Resume';clock();return}if(studyState.paused)sec=studyState.remaining||sec;studyState.running=true;studyState.paused=false;studyState.endAt=Date.now()+sec*1000;studyState.remaining=sec;saveStudyState();startTicker()};
+$('reset').onclick=()=>{if(tid){clearInterval(tid);tid=null}let mins=studyState.totalMinutes||25;sec=mins*60;studyState={running:false,paused:false,endAt:null,remaining:sec,totalMinutes:mins};saveStudyState();clock();$('start').textContent='Start';studyRewardText()};
+document.addEventListener('visibilitychange',()=>{if(!document.hidden){reconcileStudyTimer();syncGlobalHelp();if($('headerQuickAdd'))$('headerQuickAdd').classList.toggle('hidden',currentView!=='dash')}});
+window.addEventListener('pageshow',()=>{reconcileStudyTimer();syncGlobalHelp();if($('headerQuickAdd'))$('headerQuickAdd').classList.toggle('hidden',currentView!=='dash')});
+window.addEventListener('pagehide',()=>{if(studyState.running&&studyState.endAt)studyState.remaining=Math.max(0,Math.ceil((studyState.endAt-Date.now())/1000));saveStudyState()});
+$('theme').onclick=()=>document.body.dataset.theme=document.body.dataset.theme=='dark'?'light':'dark';function backup(){let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(d,null,2)],{type:'application/json'}));a.download='student-command-center-backup.json';a.click();URL.revokeObjectURL(a.href)}
+$('importer').onchange=async()=>{try{let x=JSON.parse(await $('importer').files[0].text());if(!x||typeof x!=='object'||!Array.isArray(x.assignments)||!Array.isArray(x.exams))throw new Error('Invalid backup');d=x;if(!Array.isArray(d.activities))d.activities=[];if(!Array.isArray(d.courses))d.courses=[];if(!Array.isArray(d.projects))d.projects=[];if(!Array.isArray(d.grades))d.grades=[];if(!Array.isArray(d.semesterGoals))d.semesterGoals=[];if(!Array.isArray(d.notes))d.notes=[];if(!d.prefs)d.prefs={accent:'#57d6a6',reminders:true,celebrate:true,reminderDays:2};save();pop('Backup restored')}catch{pop('Could not import: this does not look like a valid Student Command Center backup.')}};
+
+const LEVEL_TROPHIES=[
+ {icon:'🥉',name:'Starter Trophy'},
+ {icon:'🥈',name:'Momentum Trophy'},
+ {icon:'🥇',name:'Focus Trophy'},
+ {icon:'🏅',name:'Consistency Medal'},
+ {icon:'🏆',name:'Achievement Cup'},
+ {icon:'⭐',name:'Rising Star'},
+ {icon:'🌟',name:'Shining Star'},
+ {icon:'💫',name:'Momentum Star'},
+ {icon:'👑',name:'Command Crown'},
+ {icon:'💎',name:'Mastery Trophy'}
+];
+function trophyForLevel(level){
+ let n=Math.max(1,Number(level)||1);
+ return LEVEL_TROPHIES[Math.min(n,LEVEL_TROPHIES.length)-1]
+}
+function renderLevelTrophies(){
+ try{
+  let lvl=levelFromXp(d.xp),t=trophyForLevel(lvl);
+  let dash=$('dashboardTrophy'),prog=$('progressCurrentTrophy'),box=$('trophyCase');
+  if(dash){dash.textContent=t.icon;dash.title=`Level ${lvl}: ${t.name}`;dash.setAttribute('aria-label',`Level ${lvl}: ${t.name}`)}
+  if(prog){prog.textContent=t.icon;prog.title=`Level ${lvl}: ${t.name}`}
+  if(box){
+   box.innerHTML=LEVEL_TROPHIES.map((x,i)=>{
+    let n=i+1,earned=n<=lvl;
+    return `<div class="trophy-item ${earned?'':'locked'}" title="${earned?`Earned: ${x.name}`:`Unlock at Level ${n}`}"><div class="icon">${earned?x.icon:'🔒'}</div><div class="lvl">Level ${n}</div></div>`
+   }).join('')
+  }
+ }catch(e){}
+}
+
+function celebrationsEnabled(){
+  try{return !d.prefs || d.prefs.celebrate!==false}catch(e){return true}
+}
+let celebrationTimer=null;
+function celebrate(kind,title,text,icon){
+  try{
+    if(!celebrationsEnabled())return;
+    let o=$('celebrationOverlay'),c=$('celebrationCard');
+    if(!o||!c)return;
+    clearTimeout(celebrationTimer);
+    o.className='celebration-overlay celebrate-'+kind;
+    $('celebrationIcon').textContent=icon||'✨';
+    $('celebrationTitle').textContent=title||'Milestone!';
+    $('celebrationText').textContent=text||'';
+    celebrationTimer=setTimeout(()=>{o.className='celebration-overlay hidden'},1600);
+  }catch(e){}
+}
+function levelFromXp(xp){return Math.floor((Number(xp)||0)/200)+1}
+function maybeCelebrateLevel(oldXp,newXp){
+  try{
+    let before=levelFromXp(oldXp),after=levelFromXp(newXp);
+    if(after>before){let t=trophyForLevel(after);celebrate('level',`Level ${after} reached!`,`${t.name} earned — ${newXp} XP total.`,t.icon);setTimeout(renderLevelTrophies,1650)}
+  }catch(e){}
+}
+
+function pop(t){$('toast').textContent=t;$('toast').style.display='block';setTimeout(()=>$('toast').style.display='none',2000)}fillTimeSelectors();enforceFutureDates();loadStudyState();selectStudyPreset(studyState.totalMinutes||25);renderStudyHistory();studyRewardText();render();internalBackHandling=true;show('dash');internalBackHandling=false;try{history.replaceState({sccView:'dash'},'',location.href)}catch(e){}reconcileStudyTimer();renderStorageStatus();renderReleaseGate();updateConnection();detectIOSInstall();renderPWAReadiness();maybeOnboard();
+
+function activityKeyboardAssist(){
+ const modal=$('activityModal');
+ if(!modal)return;
+ modal.querySelectorAll('input,select,textarea').forEach(el=>{
+   el.addEventListener('focus',()=>{
+     setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'center'}),300);
+   });
+ });
+}
+activityKeyboardAssist();
+</script></body></html>

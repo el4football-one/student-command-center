@@ -1,0 +1,1 @@
+Final polish: schedule label spacing; assignment grades in percentage, points, or A/B/C/D/F; grades included in parent update; Help and Quick Start updated. Grades never award XP.

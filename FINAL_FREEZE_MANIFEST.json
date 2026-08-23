@@ -1,0 +1,10 @@
+{
+  "product": "Student Command Center",
+  "version": "1.0",
+  "status": "FINAL FUNCTIONAL FREEZE CANDIDATE",
+  "freeze_date": "2026-08-23",
+  "index_sha256": "779814fd1d2dd507c9844b48a85b47d2be873806314b3c603616d315c1530dee",
+  "qa_passed": 19,
+  "qa_total": 19,
+  "final_change": "Unified Schedule bundled by day for day-at-a-glance use."
+}
