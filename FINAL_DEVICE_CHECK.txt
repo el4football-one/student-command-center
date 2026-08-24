@@ -1,0 +1,17 @@
+STUDENT COMMAND CENTER v1.0 — FINAL DEVICE CHECK
+
+Final requested change:
+• Unified Schedule grouped into day cards.
+• Each day contains all classes, assignments, exams, activities, jobs and commitments in time order.
+• Dashboard Upcoming Schedule uses the same grouped-day view.
+
+Final phone check:
+1. Open Unified Schedule.
+2. Confirm each date is one grouped card.
+3. Confirm multiple event types appear together inside the same day.
+4. Confirm items are ordered morning-to-evening.
+5. Confirm today's day card is highlighted.
+6. Confirm Dashboard Upcoming Schedule is also grouped by day.
+7. Confirm previously-approved features still work.
+
+If these pass, freeze this exact package as v1.0.
